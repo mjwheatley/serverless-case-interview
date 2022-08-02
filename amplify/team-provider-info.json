@@ -1,0 +1,27 @@
+{
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-warehouse-prod-214245-authRole",
+      "UnauthRoleArn": "arn:aws:iam::104492362278:role/amplify-warehouse-prod-214245-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::104492362278:role/amplify-warehouse-prod-214245-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-warehouse-prod-214245-deployment",
+      "UnauthRoleName": "amplify-warehouse-prod-214245-unauthRole",
+      "StackName": "amplify-warehouse-prod-214245",
+      "StackId": "arn:aws:cloudformation:us-east-1:104492362278:stack/amplify-warehouse-prod-214245/cac50350-120c-11ed-8d23-122d0c4e7e13",
+      "AmplifyAppId": "d3hpew95t0johp",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-warehouse-prod-214245-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "warehouseAuth": {}
+      },
+      "function": {
+        "warehouseAuthPostConfirmation": {
+          "deploymentBucketName": "amplify-warehouse-prod-214245-deployment",
+          "s3Key": "amplify-builds/warehouseAuthPostConfirmation-765a6e6f7731505a5431-build.zip"
+        }
+      }
+    }
+  }
+}

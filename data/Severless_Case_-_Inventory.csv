@@ -1,0 +1,11 @@
+warehouse_id,product_id,inventory
+warehouse#001,product#001,5
+warehouse#002,product#001,0
+warehouse#003,product#001,10
+warehouse#001,product#002,4
+warehouse#002,product#002,23
+warehouse#003,product#002,4
+warehouse#001,product#003,20
+warehouse#002,product#003,40
+warehouse#003,product#003,80
+warehouse#004,product#004,60

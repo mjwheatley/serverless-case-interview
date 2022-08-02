@@ -1,0 +1,5 @@
+warehouse_id,name,address,city,state,zipcode,phone-number
+warehouse#001,SouthEast,9851 E. Mill Pond St.,Jupiter,FL,33458,111-111-1111
+warehouse#002,NorthEast,720 St Paul Ave.,Trenton,NJ,08610,222-222-2222
+warehouse#003,SouthWest,8270 North Spruce Road,Bakersfield,CA,93306,333-333-3333
+warehouse#005,NorthWest,56 Lawrence Court,Yakima,WA,98908,555-555-5555
