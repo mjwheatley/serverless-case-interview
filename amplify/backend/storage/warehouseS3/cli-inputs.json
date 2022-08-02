@@ -1,0 +1,14 @@
+{
+  "resourceName": "warehouseS3",
+  "policyUUID": "f2cb508d",
+  "bucketName": "warehouse-s3",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "S3Trigger9930e6ca",
+  "groupAccess": {}
+}

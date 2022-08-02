@@ -20,6 +20,10 @@
         "warehouseAuthPostConfirmation": {
           "deploymentBucketName": "amplify-warehouse-prod-214245-deployment",
           "s3Key": "amplify-builds/warehouseAuthPostConfirmation-765a6e6f7731505a5431-build.zip"
+        },
+        "S3Trigger9930e6ca": {
+          "deploymentBucketName": "amplify-warehouse-prod-214245-deployment",
+          "s3Key": "amplify-builds/S3Trigger9930e6ca-4d49535a44596e724776-build.zip"
         }
       }
     }
