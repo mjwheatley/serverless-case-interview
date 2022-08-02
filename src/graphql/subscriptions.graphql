@@ -1,27 +1,276 @@
 # this is an auto generated file. This will be overwritten
-subscription OnCreateTodo {
-  onCreateTodo {
+subscription OnCreateInventory {
+  onCreateInventory {
     id
+    warehouseId
+    productId
+    inventory
+    warehouse {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      productId
+      name
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    productInventoryId
+    warehouseInventoryId
+  }
+}
+subscription OnUpdateInventory {
+  onUpdateInventory {
+    id
+    warehouseId
+    productId
+    inventory
+    warehouse {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      productId
+      name
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    productInventoryId
+    warehouseInventoryId
+  }
+}
+subscription OnDeleteInventory {
+  onDeleteInventory {
+    id
+    warehouseId
+    productId
+    inventory
+    warehouse {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      productId
+      name
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    productInventoryId
+    warehouseInventoryId
+  }
+}
+subscription OnCreateProduct {
+  onCreateProduct {
+    id
+    productId
     name
-    description
+    manufacturer
+    cost
+    price
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-subscription OnUpdateTodo {
-  onUpdateTodo {
+subscription OnUpdateProduct {
+  onUpdateProduct {
     id
+    productId
     name
-    description
+    manufacturer
+    cost
+    price
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-subscription OnDeleteTodo {
-  onDeleteTodo {
+subscription OnDeleteProduct {
+  onDeleteProduct {
     id
+    productId
     name
-    description
+    manufacturer
+    cost
+    price
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateWarehouse {
+  onCreateWarehouse {
+    id
+    warehouseId
+    name
+    address
+    city
+    state
+    zipcode
+    phoneNumber
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateWarehouse {
+  onUpdateWarehouse {
+    id
+    warehouseId
+    name
+    address
+    city
+    state
+    zipcode
+    phoneNumber
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteWarehouse {
+  onDeleteWarehouse {
+    id
+    warehouseId
+    name
+    address
+    city
+    state
+    zipcode
+    phoneNumber
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }

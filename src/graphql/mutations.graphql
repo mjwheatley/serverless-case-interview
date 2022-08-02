@@ -1,36 +1,303 @@
 # this is an auto generated file. This will be overwritten
-mutation CreateTodo(
-  $input: CreateTodoInput!
-  $condition: ModelTodoConditionInput
+mutation CreateInventory(
+  $input: CreateInventoryInput!
+  $condition: ModelInventoryConditionInput
 ) {
-  createTodo(input: $input, condition: $condition) {
+  createInventory(input: $input, condition: $condition) {
     id
+    warehouseId
+    productId
+    inventory
+    warehouse {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      productId
+      name
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    productInventoryId
+    warehouseInventoryId
+  }
+}
+mutation UpdateInventory(
+  $input: UpdateInventoryInput!
+  $condition: ModelInventoryConditionInput
+) {
+  updateInventory(input: $input, condition: $condition) {
+    id
+    warehouseId
+    productId
+    inventory
+    warehouse {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      productId
+      name
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    productInventoryId
+    warehouseInventoryId
+  }
+}
+mutation DeleteInventory(
+  $input: DeleteInventoryInput!
+  $condition: ModelInventoryConditionInput
+) {
+  deleteInventory(input: $input, condition: $condition) {
+    id
+    warehouseId
+    productId
+    inventory
+    warehouse {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      productId
+      name
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    productInventoryId
+    warehouseInventoryId
+  }
+}
+mutation CreateProduct(
+  $input: CreateProductInput!
+  $condition: ModelProductConditionInput
+) {
+  createProduct(input: $input, condition: $condition) {
+    id
+    productId
     name
-    description
+    manufacturer
+    cost
+    price
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-mutation UpdateTodo(
-  $input: UpdateTodoInput!
-  $condition: ModelTodoConditionInput
+mutation UpdateProduct(
+  $input: UpdateProductInput!
+  $condition: ModelProductConditionInput
 ) {
-  updateTodo(input: $input, condition: $condition) {
+  updateProduct(input: $input, condition: $condition) {
     id
+    productId
     name
-    description
+    manufacturer
+    cost
+    price
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-mutation DeleteTodo(
-  $input: DeleteTodoInput!
-  $condition: ModelTodoConditionInput
+mutation DeleteProduct(
+  $input: DeleteProductInput!
+  $condition: ModelProductConditionInput
 ) {
-  deleteTodo(input: $input, condition: $condition) {
+  deleteProduct(input: $input, condition: $condition) {
     id
+    productId
     name
-    description
+    manufacturer
+    cost
+    price
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateWarehouse(
+  $input: CreateWarehouseInput!
+  $condition: ModelWarehouseConditionInput
+) {
+  createWarehouse(input: $input, condition: $condition) {
+    id
+    warehouseId
+    name
+    address
+    city
+    state
+    zipcode
+    phoneNumber
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateWarehouse(
+  $input: UpdateWarehouseInput!
+  $condition: ModelWarehouseConditionInput
+) {
+  updateWarehouse(input: $input, condition: $condition) {
+    id
+    warehouseId
+    name
+    address
+    city
+    state
+    zipcode
+    phoneNumber
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteWarehouse(
+  $input: DeleteWarehouseInput!
+  $condition: ModelWarehouseConditionInput
+) {
+  deleteWarehouse(input: $input, condition: $condition) {
+    id
+    warehouseId
+    name
+    address
+    city
+    state
+    zipcode
+    phoneNumber
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }

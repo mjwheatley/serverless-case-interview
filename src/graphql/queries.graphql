@@ -1,23 +1,177 @@
 # this is an auto generated file. This will be overwritten
-query GetTodo($id: ID!) {
-  getTodo(id: $id) {
+query GetInventory($id: ID!) {
+  getInventory(id: $id) {
     id
+    warehouseId
+    productId
+    inventory
+    warehouse {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    product {
+      id
+      productId
+      name
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    productInventoryId
+    warehouseInventoryId
+  }
+}
+query ListInventories(
+  $filter: ModelInventoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInventories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      warehouseId
+      productId
+      inventory
+      warehouse {
+        id
+        warehouseId
+        name
+        address
+        city
+        state
+        zipcode
+        phoneNumber
+        createdAt
+        updatedAt
+      }
+      product {
+        id
+        productId
+        name
+        manufacturer
+        cost
+        price
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      productInventoryId
+      warehouseInventoryId
+    }
+    nextToken
+  }
+}
+query GetProduct($id: ID!) {
+  getProduct(id: $id) {
+    id
+    productId
     name
-    description
+    manufacturer
+    cost
+    price
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-query ListTodos(
-  $filter: ModelTodoFilterInput
+query ListProducts(
+  $filter: ModelProductFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listProducts(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      productId
       name
-      description
+      manufacturer
+      cost
+      price
+      inventory {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetWarehouse($id: ID!) {
+  getWarehouse(id: $id) {
+    id
+    warehouseId
+    name
+    address
+    city
+    state
+    zipcode
+    phoneNumber
+    inventory {
+      items {
+        id
+        warehouseId
+        productId
+        inventory
+        createdAt
+        updatedAt
+        productInventoryId
+        warehouseInventoryId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+query ListWarehouses(
+  $filter: ModelWarehouseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listWarehouses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      warehouseId
+      name
+      address
+      city
+      state
+      zipcode
+      phoneNumber
+      inventory {
+        nextToken
+      }
       createdAt
       updatedAt
     }
