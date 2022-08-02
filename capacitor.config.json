@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "serverless-case-interview",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

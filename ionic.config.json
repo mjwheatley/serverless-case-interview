@@ -1,0 +1,7 @@
+{
+  "name": "serverless-case-interview",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
