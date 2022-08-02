@@ -12,7 +12,18 @@
             <ion-list id="inbox-list">
               <ion-list-header>Warehouse</ion-list-header>
               <ion-note>{{user.email}}</ion-note>
-
+              <ion-item lines="full">
+                <ion-icon slot="start" name="moon"></ion-icon>
+                <ion-label>
+                  Dark Mode
+                </ion-label>
+                <ion-toggle
+                  id="themeToggle"
+                  slot="end"
+                  [(ngModel)]="isDarkMode"
+                  (ionChange)="onChangeDarkMode()"
+                ></ion-toggle>
+              </ion-item>
               <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
                 <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>

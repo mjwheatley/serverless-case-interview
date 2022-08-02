@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Inventory
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="selectFile()"
+      >
+        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+      </ion-button>
+      <ion-button
+        (click)="navigate({id: 'create'})"
+      >
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <input
+    #hiddenFileInput
+    class="hidden-file-input"
+    type="file"
+    (change)="fileInputChangeListener($event)"
+  />
+  <div class="centered-limited-width ion-text-center">
+
+  </div>
+</ion-content>

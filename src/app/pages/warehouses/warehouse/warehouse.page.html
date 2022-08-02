@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Warehouse
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="centered-limited-width ion-text-center">
+    <ion-card-content>
+      <form [formGroup]="formGroup">
+        <mat-form-field class="mat-form-field-full-width">
+          <mat-label>
+            Warehouse Name
+          </mat-label>
+          <input
+            matInput
+            formControlName="name"
+            type="text"
+            autocapitalize="words"
+          />
+          <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
+            Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <app-mat-address
+          formControlName="address"
+        ></app-mat-address>
+        <mat-form-field class="mat-form-field-full-width">
+          <mat-label>
+            Phone Number
+          </mat-label>
+          <input
+            matInput
+            required
+            formControlName="phoneNumber"
+            type="text"
+          />
+          <mat-error *ngIf="formGroup.controls['phoneNumber'].hasError('required')">
+            Phone number is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </ion-card-content>
+  </div>
+</ion-content>
