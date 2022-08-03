@@ -33,14 +33,53 @@
       No Warehouses
     </div>
     <ion-list *ngIf="items?.length">
-      <ion-item
-        *ngFor="let item of items"
-        [button]="true"
-        [detail]="true"
-        (click)="navigate(item)"
+      <mat-form-field class="mat-form-field-full-width">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+      </mat-form-field>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        (matSortChange)="announceSortChange($event)"
       >
-        <p>{{item.name}}</p>
-      </ion-item>
+        <ng-container matColumnDef="warehouseId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by warehouse ID"> Warehouse ID </th>
+          <td mat-cell *matCellDef="let element"> {{element.warehouseId}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Warehouse Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address"> Street Address </th>
+          <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+        </ng-container>
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by city"> City </th>
+          <td mat-cell *matCellDef="let element"> {{element.city}} </td>
+        </ng-container>
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by state"> State </th>
+          <td mat-cell *matCellDef="let element"> {{element.state}} </td>
+        </ng-container>
+        <ng-container matColumnDef="zipcode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by zip code"> Zip Code </th>
+          <td mat-cell *matCellDef="let element"> {{element.zipcode}} </td>
+        </ng-container>
+        <ng-container matColumnDef="phoneNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by phone number"> Phone Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+          (click)="navigate(row)"
+        ></tr>
+      </table>
     </ion-list>
   </div>
 </ion-content>

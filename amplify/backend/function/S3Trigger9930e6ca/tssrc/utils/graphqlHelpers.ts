@@ -150,6 +150,20 @@ export type ModelWarehouseConditionInput = {
   not?: ModelWarehouseConditionInput | null;
 };
 
+export type ModelWarehouseFilterInput = {
+  id?: ModelIDInput | null;
+  warehouseId?: ModelStringInput | null;
+  name?: ModelStringInput | null;
+  address?: ModelStringInput | null;
+  city?: ModelStringInput | null;
+  state?: ModelStringInput | null;
+  zipcode?: ModelStringInput | null;
+  phoneNumber?: ModelStringInput | null;
+  and?: Array<ModelWarehouseFilterInput | null> | null;
+  or?: Array<ModelWarehouseFilterInput | null> | null;
+  not?: ModelWarehouseFilterInput | null;
+};
+
 export type CreateWarehouseMutation = {
   __typename: 'Warehouse';
   id: string;
@@ -179,6 +193,28 @@ export type CreateWarehouseMutation = {
   updatedAt: string;
 };
 
+export type ListWarehousesQuery = {
+  __typename: 'ModelWarehouseConnection';
+  items: Array<{
+    __typename: 'Warehouse';
+    id: string;
+    warehouseId: string;
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    zipcode: string;
+    phoneNumber: string;
+    inventory?: {
+      __typename: 'ModelInventoryConnection';
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null>;
+  nextToken?: string | null;
+};
+
 export type CreateProductInput = {
   id?: string | null;
   productId: string;
@@ -197,6 +233,18 @@ export type ModelProductConditionInput = {
   and?: Array<ModelProductConditionInput | null> | null;
   or?: Array<ModelProductConditionInput | null> | null;
   not?: ModelProductConditionInput | null;
+};
+
+export type ModelProductFilterInput = {
+  id?: ModelIDInput | null;
+  productId?: ModelStringInput | null;
+  name?: ModelStringInput | null;
+  manufacturer?: ModelStringInput | null;
+  cost?: ModelIntInput | null;
+  price?: ModelIntInput | null;
+  and?: Array<ModelProductFilterInput | null> | null;
+  or?: Array<ModelProductFilterInput | null> | null;
+  not?: ModelProductFilterInput | null;
 };
 
 export type CreateProductMutation = {
@@ -224,6 +272,26 @@ export type CreateProductMutation = {
   } | null;
   createdAt: string;
   updatedAt: string;
+};
+
+export type ListProductsQuery = {
+  __typename: 'ModelProductConnection';
+  items: Array<{
+    __typename: 'Product';
+    id: string;
+    productId: string;
+    name: string;
+    manufacturer: string;
+    cost?: number | null;
+    price?: number | null;
+    inventory?: {
+      __typename: 'ModelInventoryConnection';
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null>;
+  nextToken?: string | null;
 };
 
 export type CreateInventoryInput = {
@@ -387,6 +455,48 @@ export const createWarehouse = async (
   return data.createWarehouse as CreateWarehouseMutation;
 };
 
+export const listWarehouses = async (
+  filter?: ModelWarehouseFilterInput,
+  limit?: number,
+  nextToken?: string
+): Promise<ListWarehousesQuery> => {
+  const statement = gql`query ListWarehouses($filter: ModelWarehouseFilterInput, $limit: Int, $nextToken: String) {
+        listWarehouses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+          __typename
+          items {
+            __typename
+            id
+            warehouseId
+            name
+            address
+            city
+            state
+            zipcode
+            phoneNumber
+            inventory {
+              __typename
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      }`;
+  const gqlAPIServiceArguments: any = {};
+  if (filter) {
+    gqlAPIServiceArguments.filter = filter;
+  }
+  if (limit) {
+    gqlAPIServiceArguments.limit = limit;
+  }
+  if (nextToken) {
+    gqlAPIServiceArguments.nextToken = nextToken;
+  }
+  const data = await issueGQL(statement, 'ListWarehouses', gqlAPIServiceArguments);
+  return data.listWarehouses as ListWarehousesQuery;
+};
+
 export const createProduct = async (
   input: CreateProductInput,
   condition?: ModelProductConditionInput
@@ -427,6 +537,46 @@ export const createProduct = async (
   }
   const data = await issueGQL(statement, 'CreateProduct', gqlAPIServiceArguments);
   return data.createProduct as CreateProductMutation;
+};
+
+export const listProducts = async (
+  filter?: ModelProductFilterInput,
+  limit?: number,
+  nextToken?: string
+): Promise<ListProductsQuery> => {
+  const statement = gql`query ListProducts($filter: ModelProductFilterInput, $limit: Int, $nextToken: String) {
+        listProducts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+          __typename
+          items {
+            __typename
+            id
+            productId
+            name
+            manufacturer
+            cost
+            price
+            inventory {
+              __typename
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+      }`;
+  const gqlAPIServiceArguments: any = {};
+  if (filter) {
+    gqlAPIServiceArguments.filter = filter;
+  }
+  if (limit) {
+    gqlAPIServiceArguments.limit = limit;
+  }
+  if (nextToken) {
+    gqlAPIServiceArguments.nextToken = nextToken;
+  }
+  const data = await issueGQL(statement, 'ListProducts', gqlAPIServiceArguments);
+  return data.listProducts as ListProductsQuery;
 };
 
 export const createInventory = async (

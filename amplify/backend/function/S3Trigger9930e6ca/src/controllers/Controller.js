@@ -151,25 +151,46 @@ var Controller = /** @class */ (function () {
     Controller.prototype.inventory = function (_a) {
         var csvJson = _a.csvJson, logger = _a.logger;
         return __awaiter(this, void 0, void 0, function () {
-            var promises, _i, csvJson_3, item, warehouseId, productId, inventory, allSettledResults;
+            var warehouses, products, promises, _loop_1, _i, csvJson_3, item, allSettledResults;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         logger.silly("Controller.inventory()", csvJson);
+                        return [4 /*yield*/, utils_1.listWarehouses()];
+                    case 1:
+                        warehouses = (_b.sent()).items;
+                        return [4 /*yield*/, utils_1.listProducts()];
+                    case 2:
+                        products = (_b.sent()).items;
                         promises = [];
+                        _loop_1 = function (item) {
+                            var warehouseId = item.warehouse_id, productId = item.product_id, inventory = item.inventory;
+                            var warehouse = warehouses.find(function (w) { return (w === null || w === void 0 ? void 0 : w.warehouseId) === warehouseId; });
+                            var product = products.find(function (p) { return (p === null || p === void 0 ? void 0 : p.productId) === productId; });
+                            if (warehouse && product) {
+                                promises.push(utils_1.createInventory({
+                                    warehouseId: warehouseId,
+                                    warehouseInventoryId: warehouse.id,
+                                    productId: productId,
+                                    productInventoryId: product.id,
+                                    inventory: inventory
+                                }));
+                            }
+                            else {
+                                if (!warehouse) {
+                                    logger.warn("Create Inventory Error", "Warehouse[" + warehouseId + "] not found");
+                                }
+                                else if (!product) {
+                                    logger.warn("Create Inventory Error", "Product[" + productId + "] not found");
+                                }
+                            }
+                        };
                         for (_i = 0, csvJson_3 = csvJson; _i < csvJson_3.length; _i++) {
                             item = csvJson_3[_i];
-                            warehouseId = item.warehouse_id, productId = item.product_id, inventory = item.inventory;
-                            promises.push(utils_1.createInventory({
-                                warehouseId: warehouseId,
-                                warehouseInventoryId: warehouseId,
-                                productId: productId,
-                                productInventoryId: productId,
-                                inventory: inventory
-                            }));
+                            _loop_1(item);
                         }
                         return [4 /*yield*/, Promise.allSettled(promises)];
-                    case 1:
+                    case 3:
                         allSettledResults = _b.sent();
                         allSettledResults.forEach(function (result) {
                             if (result.status !== "fulfilled") {

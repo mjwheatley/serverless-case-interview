@@ -33,14 +33,45 @@
       No Products
     </div>
     <ion-list *ngIf="items?.length">
-      <ion-item
-        *ngFor="let item of items"
-        [button]="true"
-        [detail]="true"
-        (click)="navigate(item)"
+      <mat-form-field class="mat-form-field-full-width">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+      </mat-form-field>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        (matSortChange)="announceSortChange($event)"
       >
-        <p>{{item.name}}</p>
-      </ion-item>
+        <ng-container matColumnDef="productId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by product ID"> Product ID </th>
+          <td mat-cell *matCellDef="let element"> {{element.productId}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Product Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="manufacturer">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by manufacturer"> Manufacturer </th>
+          <td mat-cell *matCellDef="let element"> {{element.manufacturer}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cost"> Cost </th>
+          <td mat-cell *matCellDef="let element"> {{element.cost}} </td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by price"> Price </th>
+          <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+          (click)="navigate(row)"
+        ></tr>
+      </table>
     </ion-list>
   </div>
 </ion-content>

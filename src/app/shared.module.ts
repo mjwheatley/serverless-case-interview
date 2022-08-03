@@ -18,6 +18,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAddressComponent } from './components';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   imports: [
@@ -41,6 +43,8 @@ import { MatAddressComponent } from './components';
     MatNativeDateModule,
     MatAutocompleteModule,
     MatExpansionModule,
+    MatTableModule,
+    MatSortModule
   ],
   declarations: [
     MatAddressComponent
@@ -66,7 +70,9 @@ import { MatAddressComponent } from './components';
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTableModule,
+    MatSortModule
   ]
 })
 export class SharedModule {

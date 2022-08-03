@@ -217,6 +217,26 @@
                       {
                         "Ref": "apiwarehouseGraphQLGraphQLAPIIdOutput"
                       },
+                      "/types/Query/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apiwarehouseGraphQLGraphQLAPIIdOutput"
+                      },
                       "/types/Mutation/*"
                     ]
                   ]

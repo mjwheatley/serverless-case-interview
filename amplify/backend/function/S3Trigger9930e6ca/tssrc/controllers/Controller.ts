@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import csvtojson from 'csvtojson';
 import { S3 } from 'aws-sdk';
-import { createInventory, createProduct, createWarehouse } from '../utils';
+import { createInventory, createProduct, createWarehouse, listProducts, listWarehouses } from '../utils';
 
 const s3 = new S3();
 
@@ -97,6 +97,8 @@ export class Controller implements IController {
 
   async inventory({ csvJson, logger }: IExecuteType) {
     logger.silly(`Controller.inventory()`, csvJson);
+    const { items: warehouses } = await listWarehouses();
+    const { items: products } = await listProducts();
     const promises = [];
     for (const item of csvJson) {
       const {
@@ -104,13 +106,23 @@ export class Controller implements IController {
         product_id: productId,
         inventory
       } = item;
-      promises.push(createInventory({
-        warehouseId,
-        warehouseInventoryId: warehouseId,
-        productId,
-        productInventoryId: productId,
-        inventory
-      }));
+      const warehouse = warehouses.find(w => w?.warehouseId === warehouseId);
+      const product = products.find(p => p?.productId === productId);
+      if (warehouse && product) {
+        promises.push(createInventory({
+          warehouseId,
+          warehouseInventoryId: warehouse.id,
+          productId,
+          productInventoryId: product.id,
+          inventory
+        }));
+      } else {
+        if (!warehouse) {
+          logger.warn(`Create Inventory Error`, `Warehouse[${warehouseId}] not found`);
+        } else if (!product) {
+          logger.warn(`Create Inventory Error`, `Product[${productId}] not found`);
+        }
+      }
     }
     const allSettledResults = await Promise.allSettled(promises);
     allSettledResults.forEach((result) => {

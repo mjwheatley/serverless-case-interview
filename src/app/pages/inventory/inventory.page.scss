@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+  text-align: start;
+}
+
+.mat-row .mat-cell {
+  cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+  border-color: currentColor;
+  border-top-style: solid;
+  border-bottom: 1.5px solid;
+}
+
+th.mat-sort-header-sorted {
+  color: currentColor;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+}

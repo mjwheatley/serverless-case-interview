@@ -73,7 +73,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createInventory = exports.createProduct = exports.createWarehouse = exports.issueGQL = exports.getSignedRequest = exports.ModelAttributeTypes = void 0;
+exports.createInventory = exports.listProducts = exports.createProduct = exports.listWarehouses = exports.createWarehouse = exports.issueGQL = exports.getSignedRequest = exports.ModelAttributeTypes = void 0;
 /* eslint-disable id-blacklist,@typescript-eslint/naming-convention */
 var graphql_tag_1 = __importDefault(require("graphql-tag"));
 var graphql_1 = require("graphql");
@@ -168,12 +168,36 @@ var createWarehouse = function (input, condition) { return __awaiter(void 0, voi
     });
 }); };
 exports.createWarehouse = createWarehouse;
+var listWarehouses = function (filter, limit, nextToken) { return __awaiter(void 0, void 0, void 0, function () {
+    var statement, gqlAPIServiceArguments, data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                statement = graphql_tag_1.default(templateObject_2 || (templateObject_2 = __makeTemplateObject(["query ListWarehouses($filter: ModelWarehouseFilterInput, $limit: Int, $nextToken: String) {\n        listWarehouses(filter: $filter, limit: $limit, nextToken: $nextToken) {\n          __typename\n          items {\n            __typename\n            id\n            warehouseId\n            name\n            address\n            city\n            state\n            zipcode\n            phoneNumber\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          nextToken\n        }\n      }"], ["query ListWarehouses($filter: ModelWarehouseFilterInput, $limit: Int, $nextToken: String) {\n        listWarehouses(filter: $filter, limit: $limit, nextToken: $nextToken) {\n          __typename\n          items {\n            __typename\n            id\n            warehouseId\n            name\n            address\n            city\n            state\n            zipcode\n            phoneNumber\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          nextToken\n        }\n      }"])));
+                gqlAPIServiceArguments = {};
+                if (filter) {
+                    gqlAPIServiceArguments.filter = filter;
+                }
+                if (limit) {
+                    gqlAPIServiceArguments.limit = limit;
+                }
+                if (nextToken) {
+                    gqlAPIServiceArguments.nextToken = nextToken;
+                }
+                return [4 /*yield*/, exports.issueGQL(statement, 'ListWarehouses', gqlAPIServiceArguments)];
+            case 1:
+                data = _a.sent();
+                return [2 /*return*/, data.listWarehouses];
+        }
+    });
+}); };
+exports.listWarehouses = listWarehouses;
 var createProduct = function (input, condition) { return __awaiter(void 0, void 0, void 0, function () {
     var statement, gqlAPIServiceArguments, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                statement = graphql_tag_1.default(templateObject_2 || (templateObject_2 = __makeTemplateObject(["mutation CreateProduct($input: CreateProductInput!, $condition: ModelProductConditionInput) {\n        createProduct(input: $input, condition: $condition) {\n          __typename\n          id\n          productId\n          name\n          manufacturer\n          cost\n          price\n          inventory {\n            __typename\n            items {\n              __typename\n              id\n              warehouseId\n              productId\n              inventory\n              createdAt\n              updatedAt\n              productInventoryId\n              warehouseInventoryId\n            }\n            nextToken\n          }\n          createdAt\n          updatedAt\n        }\n      }"], ["mutation CreateProduct($input: CreateProductInput!, $condition: ModelProductConditionInput) {\n        createProduct(input: $input, condition: $condition) {\n          __typename\n          id\n          productId\n          name\n          manufacturer\n          cost\n          price\n          inventory {\n            __typename\n            items {\n              __typename\n              id\n              warehouseId\n              productId\n              inventory\n              createdAt\n              updatedAt\n              productInventoryId\n              warehouseInventoryId\n            }\n            nextToken\n          }\n          createdAt\n          updatedAt\n        }\n      }"])));
+                statement = graphql_tag_1.default(templateObject_3 || (templateObject_3 = __makeTemplateObject(["mutation CreateProduct($input: CreateProductInput!, $condition: ModelProductConditionInput) {\n        createProduct(input: $input, condition: $condition) {\n          __typename\n          id\n          productId\n          name\n          manufacturer\n          cost\n          price\n          inventory {\n            __typename\n            items {\n              __typename\n              id\n              warehouseId\n              productId\n              inventory\n              createdAt\n              updatedAt\n              productInventoryId\n              warehouseInventoryId\n            }\n            nextToken\n          }\n          createdAt\n          updatedAt\n        }\n      }"], ["mutation CreateProduct($input: CreateProductInput!, $condition: ModelProductConditionInput) {\n        createProduct(input: $input, condition: $condition) {\n          __typename\n          id\n          productId\n          name\n          manufacturer\n          cost\n          price\n          inventory {\n            __typename\n            items {\n              __typename\n              id\n              warehouseId\n              productId\n              inventory\n              createdAt\n              updatedAt\n              productInventoryId\n              warehouseInventoryId\n            }\n            nextToken\n          }\n          createdAt\n          updatedAt\n        }\n      }"])));
                 gqlAPIServiceArguments = {
                     input: input
                 };
@@ -188,12 +212,36 @@ var createProduct = function (input, condition) { return __awaiter(void 0, void 
     });
 }); };
 exports.createProduct = createProduct;
+var listProducts = function (filter, limit, nextToken) { return __awaiter(void 0, void 0, void 0, function () {
+    var statement, gqlAPIServiceArguments, data;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                statement = graphql_tag_1.default(templateObject_4 || (templateObject_4 = __makeTemplateObject(["query ListProducts($filter: ModelProductFilterInput, $limit: Int, $nextToken: String) {\n        listProducts(filter: $filter, limit: $limit, nextToken: $nextToken) {\n          __typename\n          items {\n            __typename\n            id\n            productId\n            name\n            manufacturer\n            cost\n            price\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          nextToken\n        }\n      }"], ["query ListProducts($filter: ModelProductFilterInput, $limit: Int, $nextToken: String) {\n        listProducts(filter: $filter, limit: $limit, nextToken: $nextToken) {\n          __typename\n          items {\n            __typename\n            id\n            productId\n            name\n            manufacturer\n            cost\n            price\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          nextToken\n        }\n      }"])));
+                gqlAPIServiceArguments = {};
+                if (filter) {
+                    gqlAPIServiceArguments.filter = filter;
+                }
+                if (limit) {
+                    gqlAPIServiceArguments.limit = limit;
+                }
+                if (nextToken) {
+                    gqlAPIServiceArguments.nextToken = nextToken;
+                }
+                return [4 /*yield*/, exports.issueGQL(statement, 'ListProducts', gqlAPIServiceArguments)];
+            case 1:
+                data = _a.sent();
+                return [2 /*return*/, data.listProducts];
+        }
+    });
+}); };
+exports.listProducts = listProducts;
 var createInventory = function (input, condition) { return __awaiter(void 0, void 0, void 0, function () {
     var statement, gqlAPIServiceArguments, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                statement = graphql_tag_1.default(templateObject_3 || (templateObject_3 = __makeTemplateObject(["mutation CreateInventory($input: CreateInventoryInput!, $condition: ModelInventoryConditionInput) {\n        createInventory(input: $input, condition: $condition) {\n          __typename\n          id\n          warehouseId\n          productId\n          inventory\n          warehouse {\n            __typename\n            id\n            warehouseId\n            name\n            address\n            city\n            state\n            zipcode\n            phoneNumber\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          product {\n            __typename\n            id\n            productId\n            name\n            manufacturer\n            cost\n            price\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          createdAt\n          updatedAt\n          productInventoryId\n          warehouseInventoryId\n        }\n      }"], ["mutation CreateInventory($input: CreateInventoryInput!, $condition: ModelInventoryConditionInput) {\n        createInventory(input: $input, condition: $condition) {\n          __typename\n          id\n          warehouseId\n          productId\n          inventory\n          warehouse {\n            __typename\n            id\n            warehouseId\n            name\n            address\n            city\n            state\n            zipcode\n            phoneNumber\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          product {\n            __typename\n            id\n            productId\n            name\n            manufacturer\n            cost\n            price\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          createdAt\n          updatedAt\n          productInventoryId\n          warehouseInventoryId\n        }\n      }"])));
+                statement = graphql_tag_1.default(templateObject_5 || (templateObject_5 = __makeTemplateObject(["mutation CreateInventory($input: CreateInventoryInput!, $condition: ModelInventoryConditionInput) {\n        createInventory(input: $input, condition: $condition) {\n          __typename\n          id\n          warehouseId\n          productId\n          inventory\n          warehouse {\n            __typename\n            id\n            warehouseId\n            name\n            address\n            city\n            state\n            zipcode\n            phoneNumber\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          product {\n            __typename\n            id\n            productId\n            name\n            manufacturer\n            cost\n            price\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          createdAt\n          updatedAt\n          productInventoryId\n          warehouseInventoryId\n        }\n      }"], ["mutation CreateInventory($input: CreateInventoryInput!, $condition: ModelInventoryConditionInput) {\n        createInventory(input: $input, condition: $condition) {\n          __typename\n          id\n          warehouseId\n          productId\n          inventory\n          warehouse {\n            __typename\n            id\n            warehouseId\n            name\n            address\n            city\n            state\n            zipcode\n            phoneNumber\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          product {\n            __typename\n            id\n            productId\n            name\n            manufacturer\n            cost\n            price\n            inventory {\n              __typename\n              nextToken\n            }\n            createdAt\n            updatedAt\n          }\n          createdAt\n          updatedAt\n          productInventoryId\n          warehouseInventoryId\n        }\n      }"])));
                 gqlAPIServiceArguments = {
                     input: input
                 };
@@ -208,4 +256,4 @@ var createInventory = function (input, condition) { return __awaiter(void 0, voi
     });
 }); };
 exports.createInventory = createInventory;
-var templateObject_1, templateObject_2, templateObject_3;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4, templateObject_5;

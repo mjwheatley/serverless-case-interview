@@ -14,75 +14,87 @@
   <div class="centered-limited-width ion-text-center">
     <ion-card-content>
       <form [formGroup]="formGroup">
-        <mat-form-field class="mat-form-field-full-width">
-          <mat-label>
-            Product ID
-          </mat-label>
-          <input
-            matInput
-            formControlName="productId"
-            type="text"
-          />
-          <mat-error *ngIf="formGroup.controls['productId'].hasError('required')">
-            Product ID is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="mat-form-field-full-width">
-          <mat-label>
-            Product Name
-          </mat-label>
-          <input
-            matInput
-            formControlName="name"
-            type="text"
-            autocapitalize="words"
-          />
-          <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
-            Name is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="mat-form-field-full-width">
-          <mat-label>
-            Manufacturer
-          </mat-label>
-          <input
-            matInput
-            formControlName="manufacturer"
-            type="text"
-            autocapitalize="words"
-          />
-          <mat-error *ngIf="formGroup.controls['manufacturer'].hasError('required')">
-            Manufacturer is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="mat-form-field-full-width">
-          <mat-label>
-            Cost
-          </mat-label>
-          <input
-            matInput
-            required
-            formControlName="cost"
-            type="number"
-          />
-          <mat-error *ngIf="formGroup.controls['cost'].hasError('required')">
-            Cost is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="mat-form-field-full-width">
-          <mat-label>
-            Price
-          </mat-label>
-          <input
-            matInput
-            required
-            formControlName="price"
-            type="number"
-          />
-          <mat-error *ngIf="formGroup.controls['price'].hasError('required')">
-            Price is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
+        <ion-row>
+          <ion-col>
+            <mat-form-field class="mat-form-field-full-width">
+              <mat-label>
+                Product ID
+              </mat-label>
+              <input
+                matInput
+                formControlName="productId"
+                type="text"
+              />
+              <mat-error *ngIf="formGroup.controls['productId'].hasError('required')">
+                Product ID is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </ion-col>
+          <ion-col>
+            <mat-form-field class="mat-form-field-full-width">
+              <mat-label>
+                Product Name
+              </mat-label>
+              <input
+                matInput
+                formControlName="name"
+                type="text"
+                autocapitalize="words"
+              />
+              <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
+                Name is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </ion-col>
+          <ion-col>
+            <mat-form-field class="mat-form-field-full-width">
+              <mat-label>
+                Manufacturer
+              </mat-label>
+              <input
+                matInput
+                formControlName="manufacturer"
+                type="text"
+                autocapitalize="words"
+              />
+              <mat-error *ngIf="formGroup.controls['manufacturer'].hasError('required')">
+                Manufacturer is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </ion-col>
+          <ion-col>
+            <mat-form-field class="mat-form-field-full-width">
+              <mat-label>
+                Cost
+              </mat-label>
+              <input
+                matInput
+                required
+                formControlName="cost"
+                type="number"
+              />
+              <mat-error *ngIf="formGroup.controls['cost'].hasError('required')">
+                Cost is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </ion-col>
+          <ion-col>
+            <mat-form-field class="mat-form-field-full-width">
+              <mat-label>
+                Price
+              </mat-label>
+              <input
+                matInput
+                required
+                formControlName="price"
+                type="number"
+              />
+              <mat-error *ngIf="formGroup.controls['price'].hasError('required')">
+                Price is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
       </form>
     </ion-card-content>
   </div>
