@@ -20,6 +20,18 @@ export class WarehousePage implements OnInit {
     private apiService: APIService
   ) {
     this.formGroup = new FormGroup({
+      warehouseId: new FormControl(
+        {
+          value: null,
+          disabled: false
+        },
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required
+          ]
+        }
+      ),
       name: new FormControl(
         {
           value: null,
@@ -63,10 +75,11 @@ export class WarehousePage implements OnInit {
     this.itemId = this.activatedRoute.snapshot.paramMap.get('id');
     this.item = this.router.getCurrentNavigation()?.extras?.state?.item;
     await this.zone.run(async () => {
-      if (this.itemId && this.itemId !== `create` && !this.item.id) {
+      if (this.itemId && this.itemId !== `create` && !this.item?.id) {
         this.item = await this.apiService.GetWarehouse(this.itemId);
         console.log(`item`, this.item);
         const {
+          warehouseId,
           name,
           address,
           city,
@@ -76,6 +89,7 @@ export class WarehousePage implements OnInit {
         } = this.item as Warehouse;
 
         this.formGroup.setValue({
+          warehouseId,
           name,
           address: {
             address,

@@ -25,7 +25,7 @@ export class InventoryInfoPage implements OnInit {
     this.itemId = this.activatedRoute.snapshot.paramMap.get('id');
     this.item = this.router.getCurrentNavigation()?.extras?.state?.item;
     await this.zone.run(async () => {
-      if (this.itemId && this.itemId !== `create` && !this.item.id) {
+      if (this.itemId && this.itemId !== `create` && !this.item?.id) {
         this.item = await this.apiService.GetProduct(this.itemId);
         console.log(`item`, this.item);
         // const {

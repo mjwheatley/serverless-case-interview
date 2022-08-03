@@ -29,6 +29,18 @@
     (change)="fileInputChangeListener($event)"
   />
   <div class="centered-limited-width ion-text-center">
-
+    <div *ngIf="!items?.length">
+      No Inventory
+    </div>
+    <ion-list *ngIf="items?.length">
+      <ion-item
+        *ngFor="let item of items"
+        [button]="true"
+        [detail]="true"
+        (click)="navigate(item)"
+      >
+        <p>{{item.warehouseId}}</p>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>

@@ -16,6 +16,19 @@
       <form [formGroup]="formGroup">
         <mat-form-field class="mat-form-field-full-width">
           <mat-label>
+            Product ID
+          </mat-label>
+          <input
+            matInput
+            formControlName="productId"
+            type="text"
+          />
+          <mat-error *ngIf="formGroup.controls['productId'].hasError('required')">
+            Product ID is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="mat-form-field-full-width">
+          <mat-label>
             Product Name
           </mat-label>
           <input

@@ -4,6 +4,7 @@ import { Storage } from 'aws-amplify';
 import { StoragePutResponse } from '../../models';
 import { AlertController } from '@ionic/angular';
 import { LoadingService } from '../../services';
+import { APIService } from '../../API.service';
 
 @Component({
   selector: 'app-warehouses',
@@ -12,15 +13,23 @@ import { LoadingService } from '../../services';
 })
 export class WarehousesPage implements OnInit {
   @ViewChild('hiddenFileInput') hiddenFileInput;
+  public items: any;
 
   constructor(
     private router: Router,
     private alertCtrl: AlertController,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private apiService: APIService
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const { items } = await this.apiService.ListWarehouses();
+    this.setItems(items);
+    this.apiService.OnCreateWarehouseListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onCreateWarehouse;
+      this.setItems([...this.items, item]);
+    });
   }
 
   public async navigate(item: any) {
@@ -67,5 +76,12 @@ export class WarehousesPage implements OnInit {
       });
       await alert.present();
     }
+  }
+
+  private setItems(items: any[]) {
+    this.items = items.sort((a, b) =>
+      a.warehouseId > b.warehouseId ? 1 :
+        a.warehouseId < b.warehouseId ? -1 : 0
+    );
   }
 }

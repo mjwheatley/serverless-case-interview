@@ -20,6 +20,18 @@ export class ProductPage implements OnInit {
     private apiService: APIService
   ) {
     this.formGroup = new FormGroup({
+      productId: new FormControl(
+        {
+          value: null,
+          disabled: false
+        },
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required
+          ]
+        }
+      ),
       name: new FormControl(
         {
           value: null,
@@ -75,10 +87,11 @@ export class ProductPage implements OnInit {
     this.itemId = this.activatedRoute.snapshot.paramMap.get('id');
     this.item = this.router.getCurrentNavigation()?.extras?.state?.item;
     await this.zone.run(async () => {
-      if (this.itemId && this.itemId !== `create` && !this.item.id) {
+      if (this.itemId && this.itemId !== `create` && !this.item?.id) {
         this.item = await this.apiService.GetProduct(this.itemId);
         console.log(`item`, this.item);
         const {
+          productId,
           name,
           manufacturer,
           cost,
@@ -86,6 +99,7 @@ export class ProductPage implements OnInit {
         } = this.item as Product;
 
         this.formGroup.setValue({
+          productId,
           name,
           manufacturer,
           cost,

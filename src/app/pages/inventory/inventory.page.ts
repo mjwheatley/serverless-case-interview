@@ -4,23 +4,32 @@ import { AlertController } from '@ionic/angular';
 import { LoadingService } from '../../services';
 import { Storage } from 'aws-amplify';
 import { StoragePutResponse } from '../../models';
+import { APIService } from '../../API.service';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.page.html',
-  styleUrls: ['./inventory.page.scss'],
+  styleUrls: ['./inventory.page.scss']
 })
 export class InventoryPage implements OnInit {
   @ViewChild('hiddenFileInput') hiddenFileInput;
+  public items: any;
 
   constructor(
     private router: Router,
     private alertCtrl: AlertController,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private apiService: APIService
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const { items } = await this.apiService.ListInventories();
+    this.setItems(items);
+    this.apiService.OnCreateInventoryListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onCreateInventory;
+      this.setItems([...this.items, item]);
+    });
   }
 
   public async navigate(item: any) {
@@ -67,5 +76,24 @@ export class InventoryPage implements OnInit {
       });
       await alert.present();
     }
+  }
+
+  private setItems(items: any[]) {
+    this.items = items.sort((a, b) => {
+      if (a.productId > b.productId) {
+        return 1;
+      } else if (a.productId < b.productId) {
+        return -1;
+      }
+
+      // Else go to the 2nd item
+      if (a.warehouseId < b.warehouseId) {
+        return -1;
+      } else if (a.warehouseId > b.warehouseId) {
+        return 1;
+      } else { // nothing to split them
+        return 0;
+      }
+    });
   }
 }

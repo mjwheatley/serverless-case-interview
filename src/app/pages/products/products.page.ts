@@ -4,23 +4,32 @@ import { AlertController } from '@ionic/angular';
 import { LoadingService } from '../../services';
 import { Storage } from 'aws-amplify';
 import { StoragePutResponse } from '../../models';
+import { APIService } from '../../API.service';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.page.html',
-  styleUrls: ['./products.page.scss'],
+  styleUrls: ['./products.page.scss']
 })
 export class ProductsPage implements OnInit {
   @ViewChild('hiddenFileInput') hiddenFileInput;
+  public items: any;
 
   constructor(
     private router: Router,
     private alertCtrl: AlertController,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private apiService: APIService
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const { items } = await this.apiService.ListProducts();
+    this.setItems(items);
+    this.apiService.OnCreateProductListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onCreateProduct;
+      this.setItems([...this.items, item]);
+    });
   }
 
   public async navigate(item: any) {
@@ -67,5 +76,12 @@ export class ProductsPage implements OnInit {
       });
       await alert.present();
     }
+  }
+
+  private setItems(items: any[]) {
+    this.items = items.sort((a, b) =>
+      a.productId > b.productId ? 1 :
+        a.productId < b.productId ? -1 : 0
+    );
   }
 }
