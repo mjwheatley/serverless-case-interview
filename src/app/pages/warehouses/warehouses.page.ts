@@ -4,10 +4,10 @@ import { Storage } from 'aws-amplify';
 import { StoragePutResponse } from '../../models';
 import { AlertController } from '@ionic/angular';
 import { LoadingService } from '../../services';
-import { APIService } from '../../API.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
+import { MyAPIService } from '../../MyAPI.service';
 
 @Component({
   selector: 'app-warehouses',
@@ -25,7 +25,7 @@ export class WarehousesPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController,
     private loadingService: LoadingService,
-    private apiService: APIService,
+    private apiService: MyAPIService,
     private liveAnnouncer: LiveAnnouncer,
     private changeDetectorRef: ChangeDetectorRef
   ) {
@@ -41,7 +41,7 @@ export class WarehousesPage implements OnInit {
   }
 
   public async navigate(item: any) {
-    await this.router.navigateByUrl(`warehouses/warehouse/${item.id}`, { state: item });
+    await this.router.navigateByUrl(`warehouses/warehouse/${item.id}`, { state: { item } });
   }
 
   public selectFile() {

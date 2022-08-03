@@ -72,5 +72,80 @@
         </ion-row>
       </form>
     </ion-card-content>
+    <ion-card-header>
+      <ion-card-title>
+        Inventory
+      </ion-card-title>
+    </ion-card-header>
+    <div *ngIf="!item?.inventory?.items?.length">
+      No Inventory
+    </div>
+    <ion-list *ngIf="item?.inventory?.items?.length">
+      <mat-form-field class="mat-form-field-full-width">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Search Inventory</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+      </mat-form-field>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        (matSortChange)="announceSortChange($event)"
+      >
+        <ng-container matColumnDef="productId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by product ID">
+            Product
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <ion-item lines="none" class="ion-no-padding ion-no-margin">
+              <ion-label>
+                <p>
+                  {{element.productId}}
+                </p>
+                <h2>
+                  {{element.product.name}}
+                </h2>
+                <p>
+                  {{element.product.cost | currency}}/unit
+                </p>
+              </ion-label>
+            </ion-item>
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            Total
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="inventory">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by inventory">
+            Inventory
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <h1>
+              {{element.inventory}}
+            </h1>
+          </td>
+          <td mat-footer-cell *matFooterCellDef> {{getTotalInventory()}} </td>
+        </ng-container>
+        <ng-container matColumnDef="cost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cost">
+            Cost
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <h1>
+              {{element.inventory * element.product.cost | currency}}
+            </h1>
+          </td>
+          <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+          (click)="navigate(row)"
+        ></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </table>
+    </ion-list>
   </div>
 </ion-content>

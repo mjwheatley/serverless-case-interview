@@ -4,10 +4,10 @@ import { AlertController } from '@ionic/angular';
 import { LoadingService } from '../../services';
 import { Storage } from 'aws-amplify';
 import { StoragePutResponse } from '../../models';
-import { APIService } from '../../API.service';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MyAPIService } from '../../MyAPI.service';
 
 @Component({
   selector: 'app-products',
@@ -25,7 +25,7 @@ export class ProductsPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController,
     private loadingService: LoadingService,
-    private apiService: APIService,
+    private apiService: MyAPIService,
     private liveAnnouncer: LiveAnnouncer,
     private changeDetectorRef: ChangeDetectorRef
   ) {
@@ -41,7 +41,7 @@ export class ProductsPage implements OnInit {
   }
 
   public async navigate(item: any) {
-    await this.router.navigateByUrl(`products/product/${item.id}`, { state: item });
+    await this.router.navigateByUrl(`products/product/${item.id}`, { state: { item } });
   }
 
   public selectFile() {

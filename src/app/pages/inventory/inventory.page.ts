@@ -41,7 +41,7 @@ export class InventoryPage implements OnInit {
   }
 
   public async navigate(item: any) {
-    await this.router.navigateByUrl(`inventory/inventory-info/${item.id}`, { state: item });
+    await this.router.navigateByUrl(`inventory/inventory-info/${item.id}`, { state: { item } });
   }
 
   public selectFile() {
