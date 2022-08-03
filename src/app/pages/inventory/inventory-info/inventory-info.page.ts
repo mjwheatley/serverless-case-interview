@@ -71,6 +71,7 @@ export class InventoryInfoPage implements OnInit {
       this.item = {
         warehouseId: warehouse.warehouseId,
         productId: product.productId,
+        inventory: data.inventory,
         warehouse,
         product,
         warehouseInventoryId: warehouse?.id,
@@ -174,6 +175,7 @@ export class InventoryInfoPage implements OnInit {
   }
 
   private setItems(items: any[]) {
+    console.log(`setItems`, items);
     this.items = items;
     this.dataSource = new MatTableDataSource(items);
   }
