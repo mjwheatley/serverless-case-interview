@@ -6,6 +6,7 @@ import { MyAPIService } from '../../../MyAPI.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-warehouse',
@@ -26,7 +27,8 @@ export class WarehousePage implements OnInit {
     private zone: NgZone,
     private apiService: MyAPIService,
     private liveAnnouncer: LiveAnnouncer,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private alertCtrl: AlertController
   ) {
     this.formGroup = new FormGroup({
       warehouseId: new FormControl(
@@ -89,9 +91,78 @@ export class WarehousePage implements OnInit {
         this.item = await this.apiService.GetWarehouse(this.itemId);
         console.log(`item`, this.item);
       }
-      this.updateFormGroup();
-      this.setItems(this.item.inventory.items);
+      if (this.itemId !== `create`) {
+        this.updateFormGroup();
+        this.setItems(this.item.inventory.items);
+      }
     });
+  }
+
+  public async save() {
+    if (this.formGroup.valid) {
+      console.log(`formGroup`, this.formGroup.value);
+      const {
+        warehouseId,
+        name,
+        address: {
+          address,
+          city,
+          state,
+          postalCode
+        },
+        phoneNumber
+      } = this.formGroup.value;
+      const item = {
+        warehouseId,
+        name,
+        phoneNumber,
+        address,
+        city,
+        state,
+        zipcode: postalCode
+      } as Warehouse;
+      if (this.itemId === `create`) {
+        try {
+          const warehouse = await this.apiService.CreateWarehouse(item);
+          const alert = await this.alertCtrl.create({
+            header: `Create Warehouse`,
+            message: `Successfully saved warehouse information.`,
+            buttons: [{ text: `OK` }]
+          });
+          alert.onDidDismiss().then(async () => {
+            await this.router.navigateByUrl(`warehouses/warehouse/${warehouse.id}`, { replaceUrl: true });
+          });
+          await alert.present();
+        } catch (error) {
+          const alert = await this.alertCtrl.create({
+            header: `Create Warehouse Error`,
+            message: error.message,
+            buttons: [{ text: `OK` }]
+          });
+          await alert.present();
+        }
+      } else {
+        try {
+          await this.apiService.UpdateWarehouse({
+            id: this.itemId,
+            ...item
+          });
+          const alert = await this.alertCtrl.create({
+            header: `Update Warehouse`,
+            message: `Successfully saved warehouse information.`,
+            buttons: [{ text: `OK` }]
+          });
+          await alert.present();
+        } catch (error) {
+          const alert = await this.alertCtrl.create({
+            header: `Update Warehouse Error`,
+            message: error.message,
+            buttons: [{ text: `OK` }]
+          });
+          await alert.present();
+        }
+      }
+    }
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -127,27 +198,29 @@ export class WarehousePage implements OnInit {
   }
 
   private updateFormGroup() {
-    const {
-      warehouseId,
-      name,
-      address,
-      city,
-      state,
-      zipcode: postalCode,
-      phoneNumber
-    } = this.item as Warehouse;
-
-    this.formGroup.setValue({
-      warehouseId,
-      name,
-      address: {
+    if (this.item) {
+      const {
+        warehouseId,
+        name,
         address,
         city,
         state,
-        postalCode
-      },
-      phoneNumber
-    });
+        zipcode: postalCode,
+        phoneNumber
+      } = this.item as Warehouse;
+
+      this.formGroup.setValue({
+        warehouseId,
+        name,
+        address: {
+          address,
+          city,
+          state,
+          postalCode
+        },
+        phoneNumber
+      });
+    }
   }
 
   private setItems(items: any[]) {

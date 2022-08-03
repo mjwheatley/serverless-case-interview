@@ -17,7 +17,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 export class InventoryPage implements OnInit {
   @ViewChild('hiddenFileInput') hiddenFileInput;
   @ViewChild(MatSort) sort: MatSort;
-  public items: any;
+  public items: any[];
   public displayedColumns: string[] = ['warehouseId', 'productId', 'inventory', 'cost'];
   public dataSource: MatTableDataSource<any>;
 
@@ -37,6 +37,22 @@ export class InventoryPage implements OnInit {
     this.apiService.OnCreateInventoryListener.subscribe((evt) => {
       const item = (evt as any).value.data.onCreateInventory;
       this.setItems([...this.items, item]);
+    });
+    this.apiService.OnUpdateInventoryListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onUpdateInventory;
+      this.setItems(this.items.map((i) => {
+        if (i.id === item.id) {
+          item.warehouse = i.warehouse;
+          item.product = i.product;
+          return item;
+        } else {
+          return i;
+        }
+      }));
+    });
+    this.apiService.OnDeleteInventoryListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onDeleteInventory;
+      this.setItems(this.items.filter((i) => i.id !== item.id));
     });
   }
 

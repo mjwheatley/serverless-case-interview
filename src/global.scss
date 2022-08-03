@@ -39,3 +39,8 @@
   top: 0;
   left: 0;
 }
+
+ion-item.translucent {
+  --background: translucent;
+  --inner-padding-end: 0;
+}

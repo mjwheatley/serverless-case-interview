@@ -6,6 +6,7 @@ import { MyAPIService } from '../../../MyAPI.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-product',
@@ -27,7 +28,8 @@ export class ProductPage implements OnInit {
     private zone: NgZone,
     private apiService: MyAPIService,
     private liveAnnouncer: LiveAnnouncer,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private alertCtrl: AlertController
   ) {
     this.formGroup = new FormGroup({
       productId: new FormControl(
@@ -102,9 +104,59 @@ export class ProductPage implements OnInit {
         this.item = await this.apiService.GetProduct(this.itemId);
         console.log(`item`, this.item);
       }
-      this.updateFormGroup();
-      this.setItems(this.item.inventory.items);
+      if (this.itemId !== 'create') {
+        this.updateFormGroup();
+        this.setItems(this.item.inventory.items);
+      }
     });
+  }
+
+  public async save() {
+    if (this.formGroup.valid) {
+      console.log(`formGroup`, this.formGroup.value);
+      const item = this.formGroup.value as Product;
+      if (this.itemId === `create`) {
+        try {
+          const product = await this.apiService.CreateProduct(item);
+          const alert = await this.alertCtrl.create({
+            header: `Create Product`,
+            message: `Successfully saved product information.`,
+            buttons: [{ text: `OK` }]
+          });
+          alert.onDidDismiss().then(async () => {
+            await this.router.navigateByUrl(`products/product/${product.id}`, { replaceUrl: true });
+          });
+          await alert.present();
+        } catch (error) {
+          const alert = await this.alertCtrl.create({
+            header: `Create Product Error`,
+            message: error.message,
+            buttons: [{ text: `OK` }]
+          });
+          await alert.present();
+        }
+      } else {
+        try {
+          await this.apiService.UpdateProduct({
+            id: this.itemId,
+            ...item
+          });
+          const alert = await this.alertCtrl.create({
+            header: `Update Product`,
+            message: `Successfully saved product information.`,
+            buttons: [{ text: `OK` }]
+          });
+          await alert.present();
+        } catch (error) {
+          const alert = await this.alertCtrl.create({
+            header: `Update Product Error`,
+            message: error.message,
+            buttons: [{ text: `OK` }]
+          });
+          await alert.present();
+        }
+      }
+    }
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -140,21 +192,23 @@ export class ProductPage implements OnInit {
   }
 
   public updateFormGroup() {
-    const {
-      productId,
-      name,
-      manufacturer,
-      cost,
-      price
-    } = this.item as Product;
+    if (this.item) {
+      const {
+        productId,
+        name,
+        manufacturer,
+        cost,
+        price
+      } = this.item as Product;
 
-    this.formGroup.setValue({
-      productId,
-      name,
-      manufacturer,
-      cost,
-      price
-    });
+      this.formGroup.setValue({
+        productId,
+        name,
+        manufacturer,
+        cost,
+        price
+      });
+    }
   }
 
   private setItems(items: any[]) {

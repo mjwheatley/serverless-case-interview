@@ -38,6 +38,21 @@ export class ProductsPage implements OnInit {
       const item = (evt as any).value.data.onCreateProduct;
       this.setItems([...this.items, item]);
     });
+    this.apiService.OnUpdateProductListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onUpdateProduct;
+      this.setItems(this.items.map((i) => {
+        if (i.id === item.id) {
+          item.inventory = i.inventory;
+          return item;
+        } else {
+          return i;
+        }
+      }));
+    });
+    this.apiService.OnDeleteProductListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onDeleteProduct;
+      this.setItems(this.items.filter((i) => i.id !== item.id));
+    });
   }
 
   public async navigate(item: any) {

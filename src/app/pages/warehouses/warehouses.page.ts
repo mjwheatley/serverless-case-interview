@@ -38,6 +38,21 @@ export class WarehousesPage implements OnInit {
       const item = (evt as any).value.data.onCreateWarehouse;
       this.setItems([...this.items, item]);
     });
+    this.apiService.OnUpdateWarehouseListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onUpdateWarehouse;
+      this.setItems(this.items.map((i) => {
+        if (i.id === item.id) {
+          item.inventory = i.inventory;
+          return item;
+        } else {
+          return i;
+        }
+      }));
+    });
+    this.apiService.OnDeleteWarehouseListener.subscribe((evt) => {
+      const item = (evt as any).value.data.onDeleteWarehouse;
+      this.setItems(this.items.filter((i) => i.id !== item.id));
+    });
   }
 
   public async navigate(item: any) {

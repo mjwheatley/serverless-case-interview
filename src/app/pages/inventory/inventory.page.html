@@ -32,7 +32,7 @@
     <div *ngIf="!items?.length">
       No Inventory
     </div>
-    <ion-list *ngIf="items?.length">
+    <div *ngIf="items?.length">
       <mat-form-field class="mat-form-field-full-width">
         <mat-icon matPrefix>search</mat-icon>
         <mat-label>Search</mat-label>
@@ -49,10 +49,10 @@
             Warehouse
           </th>
           <td mat-cell *matCellDef="let element">
-            <ion-item lines="none" class="ion-no-padding ion-no-margin">
+            <ion-item lines="none" class="ion-no-padding ion-no-margin translucent">
               <ion-label>
                 <p>
-                  {{element.warehouseId}}
+                  {{element.warehouse.warehouseId}}
                 </p>
                 <h2>
                   {{element.warehouse.name}}
@@ -67,10 +67,10 @@
             Product
           </th>
           <td mat-cell *matCellDef="let element">
-            <ion-item lines="none" class="ion-no-padding ion-no-margin">
+            <ion-item lines="none" class="ion-no-padding ion-no-margin translucent">
               <ion-label>
                 <p>
-                  {{element.productId}}
+                  {{element.product.productId}}
                 </p>
                 <h2>
                   {{element.product.name}}
@@ -114,6 +114,6 @@
         ></tr>
         <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
       </table>
-    </ion-list>
+    </div>
   </div>
 </ion-content>

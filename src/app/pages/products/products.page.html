@@ -32,7 +32,7 @@
     <div *ngIf="!items?.length">
       No Products
     </div>
-    <ion-list *ngIf="items?.length">
+    <div *ngIf="items?.length">
       <mat-form-field class="mat-form-field-full-width">
         <mat-icon matPrefix>search</mat-icon>
         <mat-label>Search</mat-label>
@@ -72,6 +72,6 @@
           (click)="navigate(row)"
         ></tr>
       </table>
-    </ion-list>
+    </div>
   </div>
 </ion-content>
