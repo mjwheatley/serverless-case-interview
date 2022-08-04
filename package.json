@@ -1,8 +1,21 @@
 {
   "name": "serverless-case-interview",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "mjwheatley",
+  "homepage": "https://warehoues.mawhea.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjwheatley/serverless-case-interview"
+  },
+  "keywords": [
+    "AWS",
+    "Amplify",
+    "GraphQL",
+    "DynamoDb",
+    "AWS Lambda",
+    "S3"
+  ],
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
