@@ -39,29 +39,34 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
       </mat-form-field>
       <table
+        #table
+        #sort="matSort"
         mat-table
         [dataSource]="dataSource"
         matSort
         (matSortChange)="announceSortChange($event)"
       >
         <ng-container matColumnDef="productId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by product ID"> Product ID </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by product ID"> Product ID
+          </th>
           <td mat-cell *matCellDef="let element"> {{element.productId}} </td>
         </ng-container>
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Product Name </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Product Name</th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
         <ng-container matColumnDef="manufacturer">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by manufacturer"> Manufacturer </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by manufacturer">
+            Manufacturer
+          </th>
           <td mat-cell *matCellDef="let element"> {{element.manufacturer}} </td>
         </ng-container>
         <ng-container matColumnDef="cost">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cost"> Cost </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by cost"> Cost</th>
           <td mat-cell *matCellDef="let element"> {{element.cost}} </td>
         </ng-container>
         <ng-container matColumnDef="price">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by price"> Price </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by price"> Price</th>
           <td mat-cell *matCellDef="let element"> {{element.price}} </td>
         </ng-container>
 
@@ -89,7 +94,7 @@
                 {{product.productId}}&nbsp;-&nbsp;{{product.name}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="formGroup.controls['warehouseId'].hasError('required')">
+            <mat-error *ngIf="formGroup.controls['productId'].hasError('required')">
               Product is <strong>required</strong>
             </mat-error>
           </mat-form-field>
@@ -121,9 +126,121 @@
       </ion-row>
       <ion-row *ngIf="getProductCostOfWarehouseResult">
         <ion-col>
-          The total cost of {{getProductCostOfWarehouseResult.product.name}} at the {{getProductCostOfWarehouseResult.warehouse.name}} warehouse is {{getProductCostOfWarehouseResult.total | currency}}
+          The total cost of {{getProductCostOfWarehouseResult.product.name}} at
+          the {{getProductCostOfWarehouseResult.warehouse.name}} warehouse
+          is {{getProductCostOfWarehouseResult.total | currency}}
         </ion-col>
       </ion-row>
+    </form>
+
+    <ion-card-header>
+      <ion-card-title>
+        Get totals for a product from all warehouses
+      </ion-card-title>
+    </ion-card-header>
+    <form [formGroup]="formGroup2">
+      <ion-row>
+        <ion-col>
+          <mat-form-field>
+            <mat-label>Product</mat-label>
+            <mat-select formControlName="productId" name="product">
+              <mat-option *ngFor="let product of items" [value]="product.id">
+                {{product.productId}}&nbsp;-&nbsp;{{product.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup2.controls['productId'].hasError('required')">
+              Product is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </ion-col>
+        <ion-col>
+          <ion-button
+            size="large"
+            expand="block"
+            [disabled]="formGroup2.invalid || gettingProductDataFromWarehouses"
+            (click)="getProductDataFromWarehouses()"
+          >
+            Submit
+            <ion-spinner name="dots" *ngIf="gettingProductDataFromWarehouses"></ion-spinner>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <div *ngIf="getProductDataFromWarehousesResult">
+        <ion-row>
+          <ion-col>
+            The total number of {{getProductDataFromWarehousesResult.product.name}} at all warehouses
+            is {{getProductDataFromWarehousesResult.result.totalQuantityInAllWarehouses}} with a total value
+            of {{getProductDataFromWarehousesResult?.result?.totalValueInAllWarehouses | currency}}.
+          </ion-col>
+        </ion-row>
+        <div *ngIf="!getProductDataFromWarehousesResult.result?.warehouses?.length">
+          No Inventory
+        </div>
+        <div *ngIf="getProductDataFromWarehousesResult.result?.warehouses?.length">
+          <mat-form-field class="mat-form-field-full-width">
+            <mat-icon matPrefix>search</mat-icon>
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter2($event)" placeholder="" #input2>
+          </mat-form-field>
+          <table
+            #table2
+            #sort2="matSort"
+            mat-table
+            [dataSource]="dataSource2"
+            matSort
+            (matSortChange)="announceSortChange($event)"
+          >
+            <ng-container matColumnDef="warehouseId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by warehouseId">
+                Warehouse
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <ion-item lines="none" class="ion-no-padding ion-no-margin translucent">
+                  <ion-label>
+                    <p>
+                      {{element.warehouse.warehouseId}}
+                    </p>
+                    <h2>
+                      {{element.warehouse.name}}
+                    </h2>
+                  </ion-label>
+                </ion-item>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> Total</td>
+            </ng-container>
+            <ng-container matColumnDef="productQuantity">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by productQuantity">
+                Inventory
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <h1>
+                  {{element.productQuantity}}
+                </h1>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> {{getTotalInventory()}} </td>
+            </ng-container>
+            <ng-container matColumnDef="totalValueAtWarehouse">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by totalValueAtWarehouse">
+                Cost
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <h1>
+                  {{element.totalValueAtWarehouse | currency}}
+                </h1>
+              </td>
+              <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns2;"
+              (click)="navigate2(row)"
+            ></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns2"></tr>
+          </table>
+        </div>
+      </div>
     </form>
   </div>
 </ion-content>

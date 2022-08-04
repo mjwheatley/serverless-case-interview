@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -82,10 +93,10 @@ var QueryResolver = /** @class */ (function () {
                         logger.debug("QueryResolver.getProductCostOfWarehouse() productAtWarehouse", productAtWarehouse);
                         total = 0;
                         if (productAtWarehouse === null || productAtWarehouse === void 0 ? void 0 : productAtWarehouse.length) {
-                            total = productAtWarehouse.reduce(function (acc, value) { return acc + value; }, total);
+                            total = productAtWarehouse.reduce(function (acc, value) { return acc + Number(value.inventory); }, total);
                         }
                         totalCost = total * Number(cost);
-                        logger.info("QueryResolver.getProductCostOfWarehouse() productAtWarehouse", productAtWarehouse);
+                        logger.info("QueryResolver.getProductCostOfWarehouse() totalCost", totalCost);
                         return [2 /*return*/, totalCost];
                 }
             });
@@ -94,9 +105,39 @@ var QueryResolver = /** @class */ (function () {
     QueryResolver.prototype.getProductDataFromWarehouses = function (_a) {
         var payload = _a.payload, logger = _a.logger;
         return __awaiter(this, void 0, void 0, function () {
+            var productId, product, price, cost, inventory, items, warehouses, warehouseTotals, response;
             return __generator(this, function (_b) {
-                logger.silly("Trace", "QueryResolver.getProductDataFromWarehouses()");
-                return [2 /*return*/];
+                switch (_b.label) {
+                    case 0:
+                        logger.silly("Trace", "QueryResolver.getProductDataFromWarehouses()");
+                        productId = payload.arguments.productId;
+                        return [4 /*yield*/, utils_1.getProduct(productId)];
+                    case 1:
+                        product = _b.sent();
+                        logger.debug("QueryResolver.getProductDataFromWarehouses() product", product);
+                        price = product.price, cost = product.cost, inventory = product.inventory;
+                        items = inventory.items;
+                        logger.debug("QueryResolver.getProductDataFromWarehouses() inventory", items);
+                        warehouses = items.map(function (inv) {
+                            var _a;
+                            return ({
+                                warehouseId: (_a = inv.warehouse) === null || _a === void 0 ? void 0 : _a.warehouseId,
+                                warehouse: inv.warehouse,
+                                productQuantity: inv.inventory,
+                                totalValueAtWarehouse: Number(inv.inventory) * Number(cost)
+                            });
+                        });
+                        logger.debug("QueryResolver.getProductDataFromWarehouses() warehouses", items);
+                        warehouseTotals = warehouses
+                            .reduce(function (acc, value) {
+                            acc.totalValueInAllWarehouses += value.totalValueAtWarehouse;
+                            acc.totalQuantityInAllWarehouses += value.productQuantity;
+                            return acc;
+                        }, { totalQuantityInAllWarehouses: 0, totalValueInAllWarehouses: 0 });
+                        response = __assign({ warehouses: warehouses, productCost: cost, productPrice: price }, warehouseTotals);
+                        logger.debug("QueryResolver.getProductDataFromWarehouses() response", response);
+                        return [2 /*return*/, response];
+                }
             });
         });
     };

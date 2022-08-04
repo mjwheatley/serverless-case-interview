@@ -5,6 +5,7 @@ query GetProductCostOfWarehouse($queryString: String) {
 query GetProductDataFromWarehouses($productId: String) {
   getProductDataFromWarehouses(productId: $productId) {
     warehouses {
+      warehouseId
       warehouse {
         id
         warehouseId
@@ -22,6 +23,7 @@ query GetProductDataFromWarehouses($productId: String) {
     }
     productCost
     productPrice
+    totalQuantityInAllWarehouses
     totalValueInAllWarehouses
   }
 }

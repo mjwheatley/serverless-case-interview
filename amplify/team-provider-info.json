@@ -27,7 +27,7 @@
         },
         "warehouseGraphQLResolver": {
           "deploymentBucketName": "amplify-warehouse-prod-214245-deployment",
-          "s3Key": "amplify-builds/warehouseGraphQLResolver-2b434b51664a4a383545-build.zip"
+          "s3Key": "amplify-builds/warehouseGraphQLResolver-7463317a2f464d614a2b-build.zip"
         }
       },
       "hosting": {

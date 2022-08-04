@@ -45,5 +45,37 @@ export class QueryResolver {
 
   async getProductDataFromWarehouses({ payload, logger }: IResolverParams) {
     logger.silly(`Trace`, `QueryResolver.getProductDataFromWarehouses()`);
+    const { arguments: { productId } } = payload;
+    const product = await getProduct(productId);
+    logger.debug(`QueryResolver.getProductDataFromWarehouses() product`, product);
+    const {
+      price,
+      cost,
+      inventory
+    } = product;
+    // @ts-ignore
+    const { items } = inventory;
+    logger.debug(`QueryResolver.getProductDataFromWarehouses() inventory`, items);
+    const warehouses = items.map((inv: Inventory) => ({
+      warehouseId: inv.warehouse?.warehouseId,
+      warehouse: inv.warehouse,
+      productQuantity: inv.inventory,
+      totalValueAtWarehouse: Number(inv.inventory) * Number(cost)
+    }));
+    logger.debug(`QueryResolver.getProductDataFromWarehouses() warehouses`, items);
+    const warehouseTotals: { totalQuantityInAllWarehouses: number; totalValueInAllWarehouses: number } = warehouses
+      .reduce((acc: any, value: any) => {
+        acc.totalValueInAllWarehouses += value.totalValueAtWarehouse;
+        acc.totalQuantityInAllWarehouses += value.productQuantity;
+        return acc;
+      }, { totalQuantityInAllWarehouses: 0, totalValueInAllWarehouses: 0 });
+    const response = {
+      warehouses,
+      productCost: cost,
+      productPrice: price,
+      ...warehouseTotals
+    };
+    logger.debug(`QueryResolver.getProductDataFromWarehouses() response`, response);
+    return response;
   }
 }

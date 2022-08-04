@@ -246,11 +246,13 @@ export type GetProductDataFromWarehousesResponse = {
   warehouses: Array<WarehouseProductQuantity | null>;
   productCost: number;
   productPrice: number;
+  totalQuantityInAllWarehouses: number;
   totalValueInAllWarehouses: number;
 };
 
 export type WarehouseProductQuantity = {
   __typename: "WarehouseProductQuantity";
+  warehouseId: string;
   warehouse: Warehouse;
   productQuantity: number;
   totalValueAtWarehouse: number;
@@ -610,6 +612,7 @@ export type GetProductDataFromWarehousesQuery = {
   __typename: "GetProductDataFromWarehousesResponse";
   warehouses: Array<{
     __typename: "WarehouseProductQuantity";
+    warehouseId: string;
     warehouse: {
       __typename: "Warehouse";
       id: string;
@@ -628,6 +631,7 @@ export type GetProductDataFromWarehousesQuery = {
   } | null>;
   productCost: number;
   productPrice: number;
+  totalQuantityInAllWarehouses: number;
   totalValueInAllWarehouses: number;
 };
 
@@ -1584,6 +1588,7 @@ export class APIService {
           __typename
           warehouses {
             __typename
+            warehouseId
             warehouse {
               __typename
               id
@@ -1602,6 +1607,7 @@ export class APIService {
           }
           productCost
           productPrice
+          totalQuantityInAllWarehouses
           totalValueInAllWarehouses
         }
       }`;

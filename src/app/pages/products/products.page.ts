@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { LoadingService } from '../../services';
@@ -17,14 +17,21 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ProductsPage implements OnInit {
   @ViewChild('hiddenFileInput') hiddenFileInput;
-  @ViewChild(MatSort) sort: MatSort;
+  // @ViewChildren(MatSort) sorts: QueryList<MatSort>;
+  @ViewChild(`sort`) sort: MatSort;
+  @ViewChild(`sort2`) sort2: MatSort;
   public items: any;
   public displayedColumns: string[] = ['productId', 'name', 'manufacturer', 'cost', 'price'];
   public dataSource: MatTableDataSource<any>;
+  public displayedColumns2: string[] = ['warehouseId', 'productQuantity', 'totalValueAtWarehouse'];
+  public dataSource2: MatTableDataSource<any>;
   public formGroup: FormGroup;
+  public formGroup2: FormGroup;
   public warehouses: any[];
   public getProductCostOfWarehouseResult: any;
   public gettingProductCostOfWarehouse: boolean;
+  public getProductDataFromWarehousesResult: any;
+  public gettingProductDataFromWarehouses: boolean;
 
   constructor(
     private router: Router,
@@ -60,19 +67,20 @@ export class ProductsPage implements OnInit {
         }
       )
     });
-    // this.formGroup.valueChanges.subscribe((data) => {
-    //   const warehouse = this.warehouses.find(i => i.id === data.warehouseId);
-    //   const product = this.items.find(i => i.id === data.productId);
-    //   this.item = {
-    //     warehouseId: warehouse.warehouseId,
-    //     productId: product.productId,
-    //     inventory: data.inventory,
-    //     warehouse,
-    //     product,
-    //     warehouseInventoryId: warehouse?.id,
-    //     productInventoryId: product?.id
-    //   } as Inventory;
-    // });
+    this.formGroup2 = new FormGroup({
+      productId: new FormControl(
+        {
+          value: null,
+          disabled: false
+        },
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required
+          ]
+        }
+      )
+    });
   }
 
   async ngOnInit() {
@@ -131,9 +139,41 @@ export class ProductsPage implements OnInit {
         this.gettingProductCostOfWarehouse = false;
         console.error(`GetProductCostOfWarehouse() Error`, error);
         const alert = await this.alertCtrl.create({
-          header: `GetProductCostOfWarehouse Error`,
+          header: `Request Error`,
+          subHeader: `GetProductCostOfWarehouse`,
           message: error.errors?.[0]?.message,
-          buttons: [{text: `OK`}]
+          buttons: [{ text: `OK` }]
+        });
+        await alert.present();
+      }
+    }
+  }
+
+  public async getProductDataFromWarehouses() {
+    if (this.formGroup2.valid) {
+      this.getProductDataFromWarehousesResult = null;
+      const {
+        productId
+      } = this.formGroup2.value;
+      const product = this.items.find(i => i.id === productId);
+      try {
+        this.gettingProductDataFromWarehouses = true;
+        const getProductDataFromWarehousesResult = await this.apiService.GetProductDataFromWarehouses(productId);
+        this.getProductDataFromWarehousesResult = {
+          product,
+          result: getProductDataFromWarehousesResult
+        };
+        console.log(`getProductDataFromWarehousesResult`, this.getProductDataFromWarehousesResult);
+        this.gettingProductDataFromWarehouses = false;
+        this.setItems2(getProductDataFromWarehousesResult.warehouses);
+      } catch (error) {
+        this.gettingProductDataFromWarehouses = false;
+        console.error(`GetProductCostOfWarehouse() Error`, error);
+        const alert = await this.alertCtrl.create({
+          header: `Request Error`,
+          subHeader: `GetProductCostOfWarehouse`,
+          message: error.errors?.[0]?.message,
+          buttons: [{ text: `OK` }]
         });
         await alert.present();
       }
@@ -142,6 +182,10 @@ export class ProductsPage implements OnInit {
 
   public async navigate(item: any) {
     await this.router.navigateByUrl(`products/product/${item.id}`, { state: { item } });
+  }
+
+  public async navigate2(item: any) {
+    await this.router.navigateByUrl(`warehouses/warehouse/${item.warehouse.id}`);
   }
 
   public selectFile() {
@@ -204,6 +248,21 @@ export class ProductsPage implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  public applyFilter2(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource2.filter = filterValue.trim().toLowerCase();
+  }
+
+  public getTotalInventory() {
+    return this.dataSource2.filteredData.map(item => item.productQuantity).reduce((acc, value) => acc + value, 0);
+  }
+
+  public getTotalCost() {
+    return this.dataSource2.filteredData
+      .map(item => item.totalValueAtWarehouse)
+      .reduce((acc, value) => acc + value, 0);
+  }
+
   private setItems(items: any[]) {
     this.items = items.sort((a, b) =>
       a.productId > b.productId ? 1 :
@@ -213,10 +272,42 @@ export class ProductsPage implements OnInit {
     this.dataSource.filterPredicate = this.filterPredicate.bind(this);
     this.changeDetectorRef.detectChanges();
     this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sorts.toArray()[0];
   }
 
   private filterPredicate(data: any, filter: string): boolean {
     const propertyValues = Object.keys(data).map((key) => `${data[key]}`.trim().toLowerCase());
+    return propertyValues.join(``).includes(filter);
+  }
+
+  private setItems2(items: any[]) {
+    items.sort((a, b) => {
+      if (a.warehouse.warehouseId < b.warehouse.warehouseId) {
+        return -1;
+      } else if (a.warehouse.warehouseId > b.warehouse.warehouseId) {
+        return 1;
+      } else { // nothing to split them
+        return 0;
+      }
+    });
+    this.dataSource2 = new MatTableDataSource(items);
+    this.dataSource2.filterPredicate = this.filterPredicate2.bind(this);
+    this.changeDetectorRef.detectChanges();
+    this.dataSource2.sort = this.sort2;
+    // this.dataSource2.sort = this.sorts.toArray()[1];
+    this.changeDetectorRef.detectChanges();
+  }
+
+  private filterPredicate2(data: any, filter: string): boolean {
+    const propertyValues = Object.keys(data).map((key) => {
+      if ([`warehouse`, `product`].includes(key)) {
+        const nestedObject = data[key];
+        const keyValues = Object.keys(nestedObject).map((k) => `${nestedObject[k]}`.trim().toLowerCase());
+        return keyValues.join(``);
+      } else {
+        return `${data[key]}`.trim().toLowerCase();
+      }
+    });
     return propertyValues.join(``).includes(filter);
   }
 }
