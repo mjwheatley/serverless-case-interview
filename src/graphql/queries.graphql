@@ -1,4 +1,30 @@
 # this is an auto generated file. This will be overwritten
+query GetProductCostOfWarehouse($queryString: String) {
+  getProductCostOfWarehouse(queryString: $queryString)
+}
+query GetProductDataFromWarehouses($productId: String) {
+  getProductDataFromWarehouses(productId: $productId) {
+    warehouses {
+      warehouse {
+        id
+        warehouseId
+        name
+        address
+        city
+        state
+        zipcode
+        phoneNumber
+        createdAt
+        updatedAt
+      }
+      productQuantity
+      totalValueAtWarehouse
+    }
+    productCost
+    productPrice
+    totalValueInAllWarehouses
+  }
+}
 query GetInventory($id: ID!) {
   getInventory(id: $id) {
     id

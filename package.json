@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "amplify:S3Trigger9930e6ca": "cd amplify/backend/function/S3Trigger9930e6ca && npm i && tsc -p ./tsconfig.json && cd src && npm i && cd -"
+    "amplify:S3Trigger9930e6ca": "cd amplify/backend/function/S3Trigger9930e6ca && npm i && tsc -p ./tsconfig.json && cd src && npm i && cd -",
+    "amplify:warehouseGraphQL": "cd amplify/backend/function/warehouseGraphQL && npm i && tsc -p ./tsconfig.json && cd src && npm i && cd -"
   },
   "dependencies": {
     "@angular/animations": "^14.0.0",

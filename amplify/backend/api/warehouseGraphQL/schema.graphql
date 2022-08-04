@@ -56,3 +56,22 @@ type Warehouse
   phoneNumber: String!
   inventory: [Inventory] @hasMany
 }
+
+type GetProductDataFromWarehousesResponse {
+  warehouses: [WarehouseProductQuantity]!
+  productCost: Int!
+  productPrice: Int!
+  totalValueInAllWarehouses: Int!
+}
+
+type WarehouseProductQuantity {
+  warehouse: Warehouse!
+  productQuantity: Int!
+  totalValueAtWarehouse: Int!
+}
+
+type Query
+{
+  getProductCostOfWarehouse(queryString: String): Int @function(name: "warehouseGraphQLResolver-${env}") @aws_cognito_user_pools @aws_iam,
+  getProductDataFromWarehouses(productId: String): GetProductDataFromWarehousesResponse @function(name: "warehouseGraphQLResolver-${env}") @aws_cognito_user_pools @aws_iam,
+}

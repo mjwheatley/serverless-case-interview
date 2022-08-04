@@ -8,6 +8,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MyAPIService } from '../../MyAPI.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-products',
@@ -20,6 +21,10 @@ export class ProductsPage implements OnInit {
   public items: any;
   public displayedColumns: string[] = ['productId', 'name', 'manufacturer', 'cost', 'price'];
   public dataSource: MatTableDataSource<any>;
+  public formGroup: FormGroup;
+  public warehouses: any[];
+  public getProductCostOfWarehouseResult: any;
+  public gettingProductCostOfWarehouse: boolean;
 
   constructor(
     private router: Router,
@@ -29,11 +34,56 @@ export class ProductsPage implements OnInit {
     private liveAnnouncer: LiveAnnouncer,
     private changeDetectorRef: ChangeDetectorRef
   ) {
+    this.formGroup = new FormGroup({
+      warehouseId: new FormControl(
+        {
+          value: null,
+          disabled: false
+        },
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required
+          ]
+        }
+      ),
+      productId: new FormControl(
+        {
+          value: null,
+          disabled: false
+        },
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required
+          ]
+        }
+      )
+    });
+    // this.formGroup.valueChanges.subscribe((data) => {
+    //   const warehouse = this.warehouses.find(i => i.id === data.warehouseId);
+    //   const product = this.items.find(i => i.id === data.productId);
+    //   this.item = {
+    //     warehouseId: warehouse.warehouseId,
+    //     productId: product.productId,
+    //     inventory: data.inventory,
+    //     warehouse,
+    //     product,
+    //     warehouseInventoryId: warehouse?.id,
+    //     productInventoryId: product?.id
+    //   } as Inventory;
+    // });
   }
 
   async ngOnInit() {
     const { items } = await this.apiService.ListProducts();
     this.setItems(items);
+    const { items: warehouses } = await this.apiService.ListWarehouses();
+    warehouses.sort((a, b) =>
+      a.warehouseId > b.warehouseId ? 1 :
+        a.warehouseId < b.warehouseId ? -1 : 0
+    );
+    this.warehouses = warehouses;
     this.apiService.OnCreateProductListener.subscribe((evt) => {
       const item = (evt as any).value.data.onCreateProduct;
       this.setItems([...this.items, item]);
@@ -53,6 +103,41 @@ export class ProductsPage implements OnInit {
       const item = (evt as any).value.data.onDeleteProduct;
       this.setItems(this.items.filter((i) => i.id !== item.id));
     });
+  }
+
+  public async getProductCostOfWarehouse() {
+    if (this.formGroup.valid) {
+      this.getProductCostOfWarehouseResult = null;
+      const {
+        productId,
+        warehouseId
+      } = this.formGroup.value;
+      const warehouse = this.warehouses.find(i => i.id === warehouseId);
+      const product = this.items.find(i => i.id === productId);
+      try {
+        this.gettingProductCostOfWarehouse = true;
+        const getProductCostOfWarehouseResult = await this.apiService.GetProductCostOfWarehouse(JSON.stringify({
+          productId,
+          warehouseId
+        }));
+        this.getProductCostOfWarehouseResult = {
+          product,
+          warehouse,
+          total: getProductCostOfWarehouseResult
+        };
+        console.log(`getProductCostOfWarehouseResult`, this.getProductCostOfWarehouseResult);
+        this.gettingProductCostOfWarehouse = false;
+      } catch (error) {
+        this.gettingProductCostOfWarehouse = false;
+        console.error(`GetProductCostOfWarehouse() Error`, error);
+        const alert = await this.alertCtrl.create({
+          header: `GetProductCostOfWarehouse Error`,
+          message: error.errors?.[0]?.message,
+          buttons: [{text: `OK`}]
+        });
+        await alert.present();
+      }
+    }
   }
 
   public async navigate(item: any) {

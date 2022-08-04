@@ -73,5 +73,57 @@
         ></tr>
       </table>
     </div>
+
+    <ion-card-header>
+      <ion-card-title>
+        Get total product cost at a warehouse
+      </ion-card-title>
+    </ion-card-header>
+    <form [formGroup]="formGroup">
+      <ion-row>
+        <ion-col>
+          <mat-form-field>
+            <mat-label>Product</mat-label>
+            <mat-select formControlName="productId" name="product">
+              <mat-option *ngFor="let product of items" [value]="product.id">
+                {{product.productId}}&nbsp;-&nbsp;{{product.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.controls['warehouseId'].hasError('required')">
+              Product is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </ion-col>
+        <ion-col>
+          <mat-form-field>
+            <mat-label>Warehouse</mat-label>
+            <mat-select formControlName="warehouseId" name="warehouse">
+              <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.id">
+                {{warehouse.warehouseId}}&nbsp;-&nbsp;{{warehouse.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formGroup.controls['warehouseId'].hasError('required')">
+              Warehouse is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </ion-col>
+        <ion-col>
+          <ion-button
+            size="large"
+            expand="block"
+            [disabled]="formGroup.invalid || gettingProductCostOfWarehouse"
+            (click)="getProductCostOfWarehouse()"
+          >
+            Submit
+            <ion-spinner name="dots" *ngIf="gettingProductCostOfWarehouse"></ion-spinner>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="getProductCostOfWarehouseResult">
+        <ion-col>
+          The total cost of {{getProductCostOfWarehouseResult.product.name}} at the {{getProductCostOfWarehouseResult.warehouse.name}} warehouse is {{getProductCostOfWarehouseResult.total | currency}}
+        </ion-col>
+      </ion-row>
+    </form>
   </div>
 </ion-content>

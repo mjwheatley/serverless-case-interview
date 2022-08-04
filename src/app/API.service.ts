@@ -21,10 +21,10 @@ export type __SubscriptionContainer = {
   onDeleteWarehouse: OnDeleteWarehouseSubscription;
 };
 
-export type UpdateInventoryInput = {
-  id: string;
-  warehouseId?: string | null;
-  productId?: string | null;
+export type CreateInventoryInput = {
+  id?: string | null;
+  warehouseId: string;
+  productId: string;
   inventory?: number | null;
   productInventoryId?: string | null;
   warehouseInventoryId?: string | null;
@@ -156,15 +156,24 @@ export type Product = {
   updatedAt: string;
 };
 
+export type UpdateInventoryInput = {
+  id: string;
+  warehouseId?: string | null;
+  productId?: string | null;
+  inventory?: number | null;
+  productInventoryId?: string | null;
+  warehouseInventoryId?: string | null;
+};
+
 export type DeleteInventoryInput = {
   id: string;
 };
 
-export type UpdateProductInput = {
-  id: string;
-  productId?: string | null;
-  name?: string | null;
-  manufacturer?: string | null;
+export type CreateProductInput = {
+  id?: string | null;
+  productId: string;
+  name: string;
+  manufacturer: string;
   cost?: number | null;
   price?: number | null;
 };
@@ -180,19 +189,28 @@ export type ModelProductConditionInput = {
   not?: ModelProductConditionInput | null;
 };
 
+export type UpdateProductInput = {
+  id: string;
+  productId?: string | null;
+  name?: string | null;
+  manufacturer?: string | null;
+  cost?: number | null;
+  price?: number | null;
+};
+
 export type DeleteProductInput = {
   id: string;
 };
 
-export type UpdateWarehouseInput = {
-  id: string;
-  warehouseId?: string | null;
-  name?: string | null;
-  address?: string | null;
-  city?: string | null;
-  state?: string | null;
-  zipcode?: string | null;
-  phoneNumber?: string | null;
+export type CreateWarehouseInput = {
+  id?: string | null;
+  warehouseId: string;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zipcode: string;
+  phoneNumber: string;
 };
 
 export type ModelWarehouseConditionInput = {
@@ -208,37 +226,34 @@ export type ModelWarehouseConditionInput = {
   not?: ModelWarehouseConditionInput | null;
 };
 
+export type UpdateWarehouseInput = {
+  id: string;
+  warehouseId?: string | null;
+  name?: string | null;
+  address?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zipcode?: string | null;
+  phoneNumber?: string | null;
+};
+
 export type DeleteWarehouseInput = {
   id: string;
 };
 
-export type CreateInventoryInput = {
-  id?: string | null;
-  warehouseId: string;
-  productId: string;
-  inventory?: number | null;
-  productInventoryId?: string | null;
-  warehouseInventoryId?: string | null;
+export type GetProductDataFromWarehousesResponse = {
+  __typename: "GetProductDataFromWarehousesResponse";
+  warehouses: Array<WarehouseProductQuantity | null>;
+  productCost: number;
+  productPrice: number;
+  totalValueInAllWarehouses: number;
 };
 
-export type CreateProductInput = {
-  id?: string | null;
-  productId: string;
-  name: string;
-  manufacturer: string;
-  cost?: number | null;
-  price?: number | null;
-};
-
-export type CreateWarehouseInput = {
-  id?: string | null;
-  warehouseId: string;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  zipcode: string;
-  phoneNumber: string;
+export type WarehouseProductQuantity = {
+  __typename: "WarehouseProductQuantity";
+  warehouse: Warehouse;
+  productQuantity: number;
+  totalValueAtWarehouse: number;
 };
 
 export type ModelInventoryFilterInput = {
@@ -289,6 +304,50 @@ export type ModelWarehouseConnection = {
   __typename: "ModelWarehouseConnection";
   items: Array<Warehouse | null>;
   nextToken?: string | null;
+};
+
+export type CreateInventoryMutation = {
+  __typename: "Inventory";
+  id: string;
+  warehouseId: string;
+  productId: string;
+  inventory?: number | null;
+  warehouse?: {
+    __typename: "Warehouse";
+    id: string;
+    warehouseId: string;
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    zipcode: string;
+    phoneNumber: string;
+    inventory?: {
+      __typename: "ModelInventoryConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  product?: {
+    __typename: "Product";
+    id: string;
+    productId: string;
+    name: string;
+    manufacturer: string;
+    cost?: number | null;
+    price?: number | null;
+    inventory?: {
+      __typename: "ModelInventoryConnection";
+      nextToken?: string | null;
+    } | null;
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+  productInventoryId?: string | null;
+  warehouseInventoryId?: string | null;
 };
 
 export type UpdateInventoryMutation = {
@@ -379,6 +438,33 @@ export type DeleteInventoryMutation = {
   warehouseInventoryId?: string | null;
 };
 
+export type CreateProductMutation = {
+  __typename: "Product";
+  id: string;
+  productId: string;
+  name: string;
+  manufacturer: string;
+  cost?: number | null;
+  price?: number | null;
+  inventory?: {
+    __typename: "ModelInventoryConnection";
+    items: Array<{
+      __typename: "Inventory";
+      id: string;
+      warehouseId: string;
+      productId: string;
+      inventory?: number | null;
+      createdAt: string;
+      updatedAt: string;
+      productInventoryId?: string | null;
+      warehouseInventoryId?: string | null;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type UpdateProductMutation = {
   __typename: "Product";
   id: string;
@@ -414,6 +500,35 @@ export type DeleteProductMutation = {
   manufacturer: string;
   cost?: number | null;
   price?: number | null;
+  inventory?: {
+    __typename: "ModelInventoryConnection";
+    items: Array<{
+      __typename: "Inventory";
+      id: string;
+      warehouseId: string;
+      productId: string;
+      inventory?: number | null;
+      createdAt: string;
+      updatedAt: string;
+      productInventoryId?: string | null;
+      warehouseInventoryId?: string | null;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreateWarehouseMutation = {
+  __typename: "Warehouse";
+  id: string;
+  warehouseId: string;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zipcode: string;
+  phoneNumber: string;
   inventory?: {
     __typename: "ModelInventoryConnection";
     items: Array<{
@@ -491,104 +606,29 @@ export type DeleteWarehouseMutation = {
   updatedAt: string;
 };
 
-export type CreateInventoryMutation = {
-  __typename: "Inventory";
-  id: string;
-  warehouseId: string;
-  productId: string;
-  inventory?: number | null;
-  warehouse?: {
-    __typename: "Warehouse";
-    id: string;
-    warehouseId: string;
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-    zipcode: string;
-    phoneNumber: string;
-    inventory?: {
-      __typename: "ModelInventoryConnection";
-      nextToken?: string | null;
-    } | null;
-    createdAt: string;
-    updatedAt: string;
-  } | null;
-  product?: {
-    __typename: "Product";
-    id: string;
-    productId: string;
-    name: string;
-    manufacturer: string;
-    cost?: number | null;
-    price?: number | null;
-    inventory?: {
-      __typename: "ModelInventoryConnection";
-      nextToken?: string | null;
-    } | null;
-    createdAt: string;
-    updatedAt: string;
-  } | null;
-  createdAt: string;
-  updatedAt: string;
-  productInventoryId?: string | null;
-  warehouseInventoryId?: string | null;
-};
-
-export type CreateProductMutation = {
-  __typename: "Product";
-  id: string;
-  productId: string;
-  name: string;
-  manufacturer: string;
-  cost?: number | null;
-  price?: number | null;
-  inventory?: {
-    __typename: "ModelInventoryConnection";
-    items: Array<{
-      __typename: "Inventory";
+export type GetProductDataFromWarehousesQuery = {
+  __typename: "GetProductDataFromWarehousesResponse";
+  warehouses: Array<{
+    __typename: "WarehouseProductQuantity";
+    warehouse: {
+      __typename: "Warehouse";
       id: string;
       warehouseId: string;
-      productId: string;
-      inventory?: number | null;
+      name: string;
+      address: string;
+      city: string;
+      state: string;
+      zipcode: string;
+      phoneNumber: string;
       createdAt: string;
       updatedAt: string;
-      productInventoryId?: string | null;
-      warehouseInventoryId?: string | null;
-    } | null>;
-    nextToken?: string | null;
-  } | null;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type CreateWarehouseMutation = {
-  __typename: "Warehouse";
-  id: string;
-  warehouseId: string;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  zipcode: string;
-  phoneNumber: string;
-  inventory?: {
-    __typename: "ModelInventoryConnection";
-    items: Array<{
-      __typename: "Inventory";
-      id: string;
-      warehouseId: string;
-      productId: string;
-      inventory?: number | null;
-      createdAt: string;
-      updatedAt: string;
-      productInventoryId?: string | null;
-      warehouseInventoryId?: string | null;
-    } | null>;
-    nextToken?: string | null;
-  } | null;
-  createdAt: string;
-  updatedAt: string;
+    };
+    productQuantity: number;
+    totalValueAtWarehouse: number;
+  } | null>;
+  productCost: number;
+  productPrice: number;
+  totalValueInAllWarehouses: number;
 };
 
 export type GetInventoryQuery = {
@@ -1077,6 +1117,66 @@ export type OnDeleteWarehouseSubscription = {
   providedIn: "root"
 })
 export class APIService {
+  async CreateInventory(
+    input: CreateInventoryInput,
+    condition?: ModelInventoryConditionInput
+  ): Promise<CreateInventoryMutation> {
+    const statement = `mutation CreateInventory($input: CreateInventoryInput!, $condition: ModelInventoryConditionInput) {
+        createInventory(input: $input, condition: $condition) {
+          __typename
+          id
+          warehouseId
+          productId
+          inventory
+          warehouse {
+            __typename
+            id
+            warehouseId
+            name
+            address
+            city
+            state
+            zipcode
+            phoneNumber
+            inventory {
+              __typename
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          product {
+            __typename
+            id
+            productId
+            name
+            manufacturer
+            cost
+            price
+            inventory {
+              __typename
+              nextToken
+            }
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+          productInventoryId
+          warehouseInventoryId
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <CreateInventoryMutation>response.data.createInventory;
+  }
   async UpdateInventory(
     input: UpdateInventoryInput,
     condition?: ModelInventoryConditionInput
@@ -1197,6 +1297,49 @@ export class APIService {
     )) as any;
     return <DeleteInventoryMutation>response.data.deleteInventory;
   }
+  async CreateProduct(
+    input: CreateProductInput,
+    condition?: ModelProductConditionInput
+  ): Promise<CreateProductMutation> {
+    const statement = `mutation CreateProduct($input: CreateProductInput!, $condition: ModelProductConditionInput) {
+        createProduct(input: $input, condition: $condition) {
+          __typename
+          id
+          productId
+          name
+          manufacturer
+          cost
+          price
+          inventory {
+            __typename
+            items {
+              __typename
+              id
+              warehouseId
+              productId
+              inventory
+              createdAt
+              updatedAt
+              productInventoryId
+              warehouseInventoryId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <CreateProductMutation>response.data.createProduct;
+  }
   async UpdateProduct(
     input: UpdateProductInput,
     condition?: ModelProductConditionInput
@@ -1282,6 +1425,51 @@ export class APIService {
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
     return <DeleteProductMutation>response.data.deleteProduct;
+  }
+  async CreateWarehouse(
+    input: CreateWarehouseInput,
+    condition?: ModelWarehouseConditionInput
+  ): Promise<CreateWarehouseMutation> {
+    const statement = `mutation CreateWarehouse($input: CreateWarehouseInput!, $condition: ModelWarehouseConditionInput) {
+        createWarehouse(input: $input, condition: $condition) {
+          __typename
+          id
+          warehouseId
+          name
+          address
+          city
+          state
+          zipcode
+          phoneNumber
+          inventory {
+            __typename
+            items {
+              __typename
+              id
+              warehouseId
+              productId
+              inventory
+              createdAt
+              updatedAt
+              productInventoryId
+              warehouseInventoryId
+            }
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <CreateWarehouseMutation>response.data.createWarehouse;
   }
   async UpdateWarehouse(
     input: UpdateWarehouseInput,
@@ -1373,153 +1561,60 @@ export class APIService {
     )) as any;
     return <DeleteWarehouseMutation>response.data.deleteWarehouse;
   }
-  async CreateInventory(
-    input: CreateInventoryInput,
-    condition?: ModelInventoryConditionInput
-  ): Promise<CreateInventoryMutation> {
-    const statement = `mutation CreateInventory($input: CreateInventoryInput!, $condition: ModelInventoryConditionInput) {
-        createInventory(input: $input, condition: $condition) {
-          __typename
-          id
-          warehouseId
-          productId
-          inventory
-          warehouse {
-            __typename
-            id
-            warehouseId
-            name
-            address
-            city
-            state
-            zipcode
-            phoneNumber
-            inventory {
-              __typename
-              nextToken
-            }
-            createdAt
-            updatedAt
-          }
-          product {
-            __typename
-            id
-            productId
-            name
-            manufacturer
-            cost
-            price
-            inventory {
-              __typename
-              nextToken
-            }
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-          productInventoryId
-          warehouseInventoryId
-        }
+  async GetProductCostOfWarehouse(
+    queryString?: string
+  ): Promise<number | null> {
+    const statement = `query GetProductCostOfWarehouse($queryString: String) {
+        getProductCostOfWarehouse(queryString: $queryString)
       }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
+    const gqlAPIServiceArguments: any = {};
+    if (queryString) {
+      gqlAPIServiceArguments.queryString = queryString;
     }
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <CreateInventoryMutation>response.data.createInventory;
+    return <number | null>response.data.getProductCostOfWarehouse;
   }
-  async CreateProduct(
-    input: CreateProductInput,
-    condition?: ModelProductConditionInput
-  ): Promise<CreateProductMutation> {
-    const statement = `mutation CreateProduct($input: CreateProductInput!, $condition: ModelProductConditionInput) {
-        createProduct(input: $input, condition: $condition) {
+  async GetProductDataFromWarehouses(
+    productId?: string
+  ): Promise<GetProductDataFromWarehousesQuery> {
+    const statement = `query GetProductDataFromWarehouses($productId: String) {
+        getProductDataFromWarehouses(productId: $productId) {
           __typename
-          id
-          productId
-          name
-          manufacturer
-          cost
-          price
-          inventory {
+          warehouses {
             __typename
-            items {
+            warehouse {
               __typename
               id
               warehouseId
-              productId
-              inventory
+              name
+              address
+              city
+              state
+              zipcode
+              phoneNumber
               createdAt
               updatedAt
-              productInventoryId
-              warehouseInventoryId
             }
-            nextToken
+            productQuantity
+            totalValueAtWarehouse
           }
-          createdAt
-          updatedAt
+          productCost
+          productPrice
+          totalValueInAllWarehouses
         }
       }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
+    const gqlAPIServiceArguments: any = {};
+    if (productId) {
+      gqlAPIServiceArguments.productId = productId;
     }
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <CreateProductMutation>response.data.createProduct;
-  }
-  async CreateWarehouse(
-    input: CreateWarehouseInput,
-    condition?: ModelWarehouseConditionInput
-  ): Promise<CreateWarehouseMutation> {
-    const statement = `mutation CreateWarehouse($input: CreateWarehouseInput!, $condition: ModelWarehouseConditionInput) {
-        createWarehouse(input: $input, condition: $condition) {
-          __typename
-          id
-          warehouseId
-          name
-          address
-          city
-          state
-          zipcode
-          phoneNumber
-          inventory {
-            __typename
-            items {
-              __typename
-              id
-              warehouseId
-              productId
-              inventory
-              createdAt
-              updatedAt
-              productInventoryId
-              warehouseInventoryId
-            }
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <CreateWarehouseMutation>response.data.createWarehouse;
+    return <GetProductDataFromWarehousesQuery>(
+      response.data.getProductDataFromWarehouses
+    );
   }
   async GetInventory(id: string): Promise<GetInventoryQuery> {
     const statement = `query GetInventory($id: ID!) {

@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,29 +37,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handler = void 0;
-/* eslint-disable @typescript-eslint/naming-convention */
 var module_lambda_handlers_1 = require("@mawhea/module-lambda-handlers");
 var controllers_1 = require("./controllers");
-var LambdaHandler = /** @class */ (function (_super) {
-    __extends(LambdaHandler, _super);
-    function LambdaHandler() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    LambdaHandler.prototype.validateEvent = function () {
-        var _a, _b;
-        return !!((_b = (_a = this.event.Records) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.s3);
-    };
-    LambdaHandler.prototype.setPayloadFromEvent = function () {
-        this.payload = this.event.Records[0].s3;
-    };
-    return LambdaHandler;
-}(module_lambda_handlers_1.Handler));
+/**
+ * Using this as the entry point, you can use a single function to handle many resolvers.
+ */
+var resolvers = {
+    Query: controllers_1.QueryResolver,
+    Mutation: controllers_1.MutationResolver
+};
+// event
+// {
+//   "typeName": "Query", /* Filled dynamically based on @function usage location */
+//   "fieldName": "me", /* Filled dynamically based on @function usage location */
+//   "arguments": { /* GraphQL field arguments via $ctx.arguments */ },
+//   "identity": { /* AppSync identity object via $ctx.identity */ },
+//   "source": { /* The object returned by the parent resolver. E.G. if resolving field 'Post.comments', the source is the Post object. */ },
+//   "request": { /* AppSync request object. Contains things like headers. */ },
+//   "prev": { /* If using the built-in pipeline resolver support, this contains the object returned by the previous function. */ },
+// }
 var handler = function (event, context) { return __awaiter(void 0, void 0, void 0, function () {
-    var h, controller;
+    var h, typeName, controller;
     return __generator(this, function (_a) {
-        h = new LambdaHandler({ event: event, context: context });
-        controller = new controllers_1.Controller();
-        return [2 /*return*/, h.handleIt({ controller: controller })];
+        switch (_a.label) {
+            case 0:
+                h = new module_lambda_handlers_1.Handler({ event: event, context: context });
+                h.setPayloadFromEvent();
+                typeName = event.typeName;
+                controller = new resolvers[typeName]();
+                if (!controller) return [3 /*break*/, 2];
+                return [4 /*yield*/, h.startController({ controller: controller })];
+            case 1: return [2 /*return*/, _a.sent()];
+            case 2: throw new Error('Resolver not found.');
+        }
     });
 }); };
 exports.handler = handler;

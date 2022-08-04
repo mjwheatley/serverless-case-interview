@@ -23,7 +23,11 @@
         },
         "S3Trigger9930e6ca": {
           "deploymentBucketName": "amplify-warehouse-prod-214245-deployment",
-          "s3Key": "amplify-builds/S3Trigger9930e6ca-6e664e2b753756366f7a-build.zip"
+          "s3Key": "amplify-builds/S3Trigger9930e6ca-676963713752706d5543-build.zip"
+        },
+        "warehouseGraphQLResolver": {
+          "deploymentBucketName": "amplify-warehouse-prod-214245-deployment",
+          "s3Key": "amplify-builds/warehouseGraphQLResolver-2b434b51664a4a383545-build.zip"
         }
       },
       "hosting": {

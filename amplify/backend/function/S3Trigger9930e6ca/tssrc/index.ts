@@ -2,11 +2,7 @@
 import { Handler } from '@mawhea/module-lambda-handlers';
 import { Controller } from './controllers';
 
-const {
-  LOG_LEVEL = `silly`
-} = process.env;
-
-class MyHandler extends Handler {
+class LambdaHandler extends Handler {
   validateEvent(): boolean {
     return !!this.event.Records?.[0]?.s3;
   }
@@ -17,8 +13,7 @@ class MyHandler extends Handler {
 }
 
 export const handler = async (event: any, context: any) => {
-  const h = new MyHandler({event, context});
-  h.logger.updateConfig({ config: { logger: { LOG_LEVEL } } });
+  const h = new LambdaHandler({ event, context });
   const controller = new Controller();
   return h.handleIt({ controller });
 };

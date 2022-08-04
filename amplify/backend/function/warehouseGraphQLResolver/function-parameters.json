@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "warehouseGraphQL": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

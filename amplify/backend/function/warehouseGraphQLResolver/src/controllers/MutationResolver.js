@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -51,30 +36,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handler = void 0;
-/* eslint-disable @typescript-eslint/naming-convention */
-var module_lambda_handlers_1 = require("@mawhea/module-lambda-handlers");
-var controllers_1 = require("./controllers");
-var LambdaHandler = /** @class */ (function (_super) {
-    __extends(LambdaHandler, _super);
-    function LambdaHandler() {
-        return _super !== null && _super.apply(this, arguments) || this;
+exports.MutationResolver = void 0;
+var MutationResolver = /** @class */ (function () {
+    function MutationResolver() {
     }
-    LambdaHandler.prototype.validateEvent = function () {
-        var _a, _b;
-        return !!((_b = (_a = this.event.Records) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.s3);
+    MutationResolver.prototype.execute = function (_a) {
+        var payload = _a.payload, logger = _a.logger;
+        return __awaiter(this, void 0, void 0, function () {
+            var fieldName;
+            return __generator(this, function (_b) {
+                logger.silly("Trace", "MutationResolver.execute()");
+                fieldName = payload.fieldName;
+                logger.info("MutationResolver fieldName", fieldName);
+                // @ts-ignore
+                if (!this[fieldName]) {
+                    throw new Error("Resolver not found.");
+                }
+                else {
+                    // @ts-ignore
+                    return [2 /*return*/, this[fieldName]({ payload: payload, logger: logger })];
+                }
+                return [2 /*return*/];
+            });
+        });
     };
-    LambdaHandler.prototype.setPayloadFromEvent = function () {
-        this.payload = this.event.Records[0].s3;
-    };
-    return LambdaHandler;
-}(module_lambda_handlers_1.Handler));
-var handler = function (event, context) { return __awaiter(void 0, void 0, void 0, function () {
-    var h, controller;
-    return __generator(this, function (_a) {
-        h = new LambdaHandler({ event: event, context: context });
-        controller = new controllers_1.Controller();
-        return [2 /*return*/, h.handleIt({ controller: controller })];
-    });
-}); };
-exports.handler = handler;
+    return MutationResolver;
+}());
+exports.MutationResolver = MutationResolver;
