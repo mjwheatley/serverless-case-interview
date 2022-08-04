@@ -25,6 +25,12 @@
           "deploymentBucketName": "amplify-warehouse-prod-214245-deployment",
           "s3Key": "amplify-builds/S3Trigger9930e6ca-6e664e2b753756366f7a-build.zip"
         }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3hpew95t0johp",
+          "type": "manual"
+        }
       }
     }
   }
